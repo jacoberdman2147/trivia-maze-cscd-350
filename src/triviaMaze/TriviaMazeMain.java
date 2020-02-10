@@ -1,11 +1,16 @@
 package triviaMaze;
 
+import triviaMaze.room.*;
+import triviaMaze.maze.*;
+
 public class TriviaMazeMain
 {
 
 	public static void main(String[] args)
 	{
-		System.out.println("Hello World Dev!");
+		IMaze testMaze = new LinkedRectangularMaze(10,10);
+		IRoom start = testMaze.getStart();
+		System.out.println(testMaze.isTraversable(start));
 	}
 
 }

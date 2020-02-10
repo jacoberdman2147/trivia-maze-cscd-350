@@ -1,6 +1,7 @@
 package triviaMaze.maze;
 
 import triviaMaze.room.*;
+import java.util.*;
 
 public class LinkedRectangularMaze implements IMaze
 {
@@ -37,9 +38,22 @@ public class LinkedRectangularMaze implements IMaze
 	}
 
 	@Override
-	public boolean isTraversable(IRoom cur) //NOT IMPLEMENTED
+	public boolean isTraversable(IRoom cur)
 	{
-		return true;
+		return isTraversable(cur, new HashMap<IRoom, Integer>());
+	}
+	
+	private boolean isTraversable(IRoom cur, Map<IRoom, Integer> traversed) {
+		if (cur == null) return false;
+		if (cur.equals(this.end)) return true;
+		if (traversed.containsKey(cur)) return false;
+		boolean ret = false;
+		traversed.put(cur, Integer.valueOf(1));
+		if (cur.canMoveInDirection("right")) if (isTraversable(cur.roomAtDirection("right"), traversed)) return true;
+		if (cur.canMoveInDirection("down")) if (isTraversable(cur.roomAtDirection("down"), traversed)) return true;
+		if (cur.canMoveInDirection("left")) if (isTraversable(cur.roomAtDirection("left"), traversed)) return true;
+		if (cur.canMoveInDirection("up")) if (isTraversable(cur.roomAtDirection("up"), traversed)) return true;
+		return false;
 	}
 
 	@Override
