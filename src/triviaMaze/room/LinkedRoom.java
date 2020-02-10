@@ -47,7 +47,7 @@ public class LinkedRoom extends IRoom
 	}
 	
 	private IRoomLink getLinkInDirection(String direction) {
-		switch (direction) {
+		switch (direction.toLowerCase()) {
 		case "right":
 			return right;
 		case "left":

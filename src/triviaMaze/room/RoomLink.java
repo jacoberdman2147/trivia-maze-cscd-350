@@ -13,7 +13,7 @@ public class RoomLink implements IRoomLink
 	}
 	
 	public RoomLink() {
-		enabled = true;
+		enabled = false;
 		answered = false;
 		this.room = null;
 	}
@@ -55,6 +55,7 @@ public class RoomLink implements IRoomLink
 	@Override
 	public void setRoom(IRoom room) {
 		this.room = room;
+		if (room != null) this.enabled = true;
 	}
 	
 	
