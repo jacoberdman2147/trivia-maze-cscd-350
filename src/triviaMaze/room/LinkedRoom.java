@@ -19,34 +19,34 @@ public class LinkedRoom extends IRoom
 	}
 	
 	@Override
-	public boolean canMoveInDirection(String direction)
+	public boolean isEnabled(String direction)
 	{
-		IRoomLink link = getLinkInDirection(direction);
+		IRoomLink link = getLink(direction);
 		return link.isEnabled();
 	}
 
 	@Override
-	public IRoom roomAtDirection(String direction)
+	public IRoom getRoom(String direction)
 	{
-		IRoomLink link = getLinkInDirection(direction);
+		IRoomLink link = getLink(direction);
 		return link.getRoom();
 	}
 
 	@Override
-	public boolean isAnsweredAtDirection(String direction)
+	public boolean isAnswered(String direction)
 	{
-		IRoomLink link = getLinkInDirection(direction);
+		IRoomLink link = getLink(direction);
 		return link.isAnswered();
 	}
 
 	@Override
-	public void setRoomAtDirection(String direction, IRoom room)
+	public void setRoom(String direction, IRoom room)
 	{
-		IRoomLink link = getLinkInDirection(direction);
+		IRoomLink link = getLink(direction);
 		link.setRoom(room);
 	}
 	
-	private IRoomLink getLinkInDirection(String direction) {
+	private IRoomLink getLink(String direction) {
 		switch (direction.toLowerCase()) {
 		case "right":
 			return right;
@@ -58,6 +58,43 @@ public class LinkedRoom extends IRoom
 			return down;
 		default:
 			throw new IllegalArgumentException("Invalid direction passed into a directional function of LinkedRoom");
+		}
+	}
+	
+	private String invertDirection(String direction) {
+		switch (direction.toLowerCase()) {
+		case "right":
+			return "left";
+		case "left":
+			return "right";
+		case "up":
+			return "down";
+		case "down":
+			return "up";
+		default:
+			throw new IllegalArgumentException("Invalid direction passed into a directional function of LinkedRoom");
+		}
+	}
+	
+	@Override
+	public void answer(String direction)
+	{
+		IRoomLink link = getLink(direction);
+		link.answer();
+		String invertedDirection = invertDirection(direction);
+		if (link.getRoom() != null) {
+			if (link.getRoom().isAnswered(invertedDirection)) link.getRoom().answer(invertedDirection);
+		}
+	}
+
+	@Override
+	public void disable(String direction)
+	{
+		IRoomLink link = getLink(direction);
+		link.disable();
+		String invertedDirection = invertDirection(direction);
+		if (link.getRoom() != null) {
+			if (link.getRoom().isEnabled(invertedDirection)) link.getRoom().disable(invertedDirection);
 		}
 	}
 	
@@ -75,5 +112,4 @@ public class LinkedRoom extends IRoom
 	public int hashCode() {
 		return uuid.hashCode();
 	}
-
 }
