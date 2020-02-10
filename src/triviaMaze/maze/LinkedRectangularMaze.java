@@ -30,10 +30,10 @@ public class LinkedRectangularMaze implements IMaze
 	
 	private void assignRoomLinks(IRoom[][] rooms, int y, int x) {
 		IRoom cur = rooms[y][x];
-		cur.setRoomAtDirection("left", rooms[y][x - 1]);
-		cur.setRoomAtDirection("right", rooms[y][x + 1]);
-		cur.setRoomAtDirection("up", rooms[y - 1][x]);
-		cur.setRoomAtDirection("down", rooms[y + 1][x]);
+		cur.setRoom("left", rooms[y][x - 1]);
+		cur.setRoom("right", rooms[y][x + 1]);
+		cur.setRoom("up", rooms[y - 1][x]);
+		cur.setRoom("down", rooms[y + 1][x]);
 		
 	}
 
@@ -49,10 +49,10 @@ public class LinkedRectangularMaze implements IMaze
 		if (traversed.containsKey(cur)) return false;
 		boolean ret = false;
 		traversed.put(cur, Integer.valueOf(1));
-		if (cur.canMoveInDirection("right")) if (isTraversable(cur.roomAtDirection("right"), traversed)) return true;
-		if (cur.canMoveInDirection("down")) if (isTraversable(cur.roomAtDirection("down"), traversed)) return true;
-		if (cur.canMoveInDirection("left")) if (isTraversable(cur.roomAtDirection("left"), traversed)) return true;
-		if (cur.canMoveInDirection("up")) if (isTraversable(cur.roomAtDirection("up"), traversed)) return true;
+		if (cur.isEnabled("right")) if (isTraversable(cur.getRoom("right"), traversed)) return true;
+		if (cur.isEnabled("down")) if (isTraversable(cur.getRoom("down"), traversed)) return true;
+		if (cur.isEnabled("left")) if (isTraversable(cur.getRoom("left"), traversed)) return true;
+		if (cur.isEnabled("up")) if (isTraversable(cur.getRoom("up"), traversed)) return true;
 		return false;
 	}
 
