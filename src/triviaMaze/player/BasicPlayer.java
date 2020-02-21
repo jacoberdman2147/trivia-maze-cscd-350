@@ -1,7 +1,8 @@
 package triviaMaze.player;
 
-import triviaMaze.room.IRoom;
-import triviaMaze.keyService.*;
+import java.util.*;
+import triviaMaze.eventService.*;
+import triviaMaze.room.*;
 
 public class BasicPlayer implements IPlayer
 {
@@ -11,51 +12,35 @@ public class BasicPlayer implements IPlayer
 	public BasicPlayer(IRoom start, IRoom end) {
 		this.end = end;
 		cur = start;
-		addKeyHandlers();
+		addEventHandlers();
 	}
 	
-	private void addKeyHandlers() {
-		TmKeyService.addHandler(new KeyHandler('a'){
-			private String direction = "left";
+	private void addEventHandlers() {
+		TmEventService.addHandler(new TmHandler("a"){
 			@Override
 			public void fire() {
-				if (cur.isEnabled(direction)) {
-					cur = cur.getRoom(direction);
-					System.out.println("Moved " + direction);
-				}
+				tryMove("left");
 			}
 		});
-		TmKeyService.addHandler(new KeyHandler('d'){
-			private String direction = "right";
+		TmEventService.addHandler(new TmHandler("d"){
 			@Override
 			public void fire() {
-				if (cur.isEnabled(direction)) {
-					cur = cur.getRoom(direction);
-					System.out.println("Moved " + direction);
-				}
+				tryMove("right");
 			}
 		});
-		TmKeyService.addHandler(new KeyHandler('w'){
-			private String direction = "up";
+		TmEventService.addHandler(new TmHandler("w"){
 			@Override
 			public void fire() {
-				if (cur.isEnabled(direction)) {
-					cur = cur.getRoom(direction);
-					System.out.println("Moved " + direction);
-				}
+				tryMove("up");
 			}
 		});
-		TmKeyService.addHandler(new KeyHandler('s'){
-			private String direction = "down";
+		TmEventService.addHandler(new TmHandler("s"){
 			@Override
 			public void fire() {
-				if (cur.isEnabled(direction)) {
-					cur = cur.getRoom(direction);
-					System.out.println("Moved " + direction);
-				}
+				tryMove("down");
 			}
 		});
-		TmKeyService.addHandler(new KeyHandler(' '){
+		TmEventService.addHandler(new TmHandler(" "){
 			@Override
 			public void fire() {
 				System.out.println("At exit? " + (cur.equals(end)));
@@ -73,6 +58,29 @@ public class BasicPlayer implements IPlayer
 	public void move(IRoom to)
 	{
 		cur = to;
+	}
+	
+	private void tryMove(String direction) {
+		if (cur.isEnabled(direction) && cur.isAnswered(direction)) {
+			cur = cur.getRoom(direction);
+			System.out.println("Moved " + direction);
+			TmEventService.fireEvent("onmove");
+		} else if(!cur.isAnswered(direction) && cur.isEnabled(direction)) {
+			boolean success = askQuestion();
+			cur.answer(direction);
+			if (!success){
+				cur.disable(direction);
+				TmEventService.fireEvent("questionmiss");
+			}
+			else tryMove(direction);
+		}
+	}
+	
+	private boolean askQuestion() {
+		System.out.println("This is a question, reply 'test'");
+		Scanner s = new Scanner(System.in);
+		String response = s.nextLine();
+		return response.equals("test");
 	}
 
 }

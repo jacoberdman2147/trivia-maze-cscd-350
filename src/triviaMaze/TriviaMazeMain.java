@@ -2,8 +2,8 @@ package triviaMaze;
 
 import java.io.*;
 import triviaMaze.room.*;
+import triviaMaze.eventService.*;
 import triviaMaze.maze.*;
-import triviaMaze.keyService.*;
 import triviaMaze.player.*;
 
 public class TriviaMazeMain
@@ -13,9 +13,6 @@ public class TriviaMazeMain
 	{
 		IMaze testMaze = new LinkedRectangularMaze(5,5);
 		IRoom start = testMaze.getStart();
-		testMaze.getEnd().disable("up");
-		testMaze.getEnd().disable("left");
-		System.out.println(testMaze.isTraversable(start));
 		
 		IPlayer player = new BasicPlayer(testMaze.getStart(), testMaze.getEnd());
 		
@@ -24,7 +21,7 @@ public class TriviaMazeMain
 
 		   while (line.equalsIgnoreCase("exit") == false) {
 		       line = in.readLine();
-		       if (line.length() == 1) TmKeyService.keyPressed(line);
+		       if (line.length() == 1) TmEventService.fireEvent(line);
 		   }
 
 		   in.close();

@@ -1,18 +1,18 @@
-package triviaMaze.keyService;
+package triviaMaze.eventService;
 
 import java.util.*;
 
-public class TmKeyService {
-	private static List<KeyHandler> handlers;
+public class TmEventService {
+	private static List<TmHandler> handlers;
 	static {
-		handlers = new LinkedList<KeyHandler>();
+		handlers = new LinkedList<TmHandler>();
 	}
 	
-	public static void addHandler(KeyHandler handler) {
+	public static void addHandler(TmHandler handler) {
 		handlers.add(handler);
 	}
 	
-	public static boolean removeHandler(KeyHandler handler) {
+	public static boolean removeHandler(TmHandler handler) {
 		if (handlers.contains(handler)) {
 			handlers.remove(handler);
 			return true;
@@ -20,9 +20,9 @@ public class TmKeyService {
 		return false;
 	}
 	
-	public static void keyPressed(String message) {
-		for (KeyHandler handler : handlers) {
-			if (message.equals(String.valueOf(handler.key))){ //This will likely need to be changed when swing is implemented and we can use proper key handling
+	public static void fireEvent(String message) {
+		for (TmHandler handler : handlers) {
+			if (message.equals(handler.trigger)){ //This will likely need to be changed when swing is implemented and we can use proper key handling
 				handler.fire();
 			}
 		}

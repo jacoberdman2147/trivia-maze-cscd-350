@@ -1,5 +1,7 @@
 package triviaMaze.maze;
 
+import triviaMaze.eventService.TmEventService;
+import triviaMaze.eventService.TmHandler;
 import triviaMaze.room.*;
 import java.util.*;
 
@@ -10,6 +12,11 @@ public class LinkedRectangularMaze implements IMaze
 	
 	public LinkedRectangularMaze(int height, int width) {
 		createMazeStructure(height, width); //Sets start and end
+		addEventHandlers();
+	}
+	
+	private void addEventHandlers() {
+		
 	}
 	
 	private void createMazeStructure(int height, int width) {
