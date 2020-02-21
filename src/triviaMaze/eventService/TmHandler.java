@@ -1,10 +1,10 @@
-package triviaMaze.keyService;
+package triviaMaze.eventService;
 
-public abstract class KeyHandler {
-	public final char key;
+public abstract class TmHandler {
+	public final String trigger;
 	
-	public KeyHandler(char key) {
-		this.key = key;
+	public TmHandler(String trigger) {
+		this.trigger = trigger;
 	}
 	
 	public abstract void fire();
