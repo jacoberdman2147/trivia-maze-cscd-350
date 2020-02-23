@@ -83,7 +83,7 @@ public class LinkedRoom extends IRoom
 		link.answer();
 		String invertedDirection = invertDirection(direction);
 		if (link.getRoom() != null) {
-			if (link.getRoom().isAnswered(invertedDirection)) link.getRoom().answer(invertedDirection);
+			if (!link.getRoom().isAnswered(invertedDirection)) link.getRoom().answer(invertedDirection);
 		}
 	}
 

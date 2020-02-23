@@ -62,9 +62,13 @@ public class BasicPlayer implements IPlayer
 			cur.answer(direction);
 			if (!success){
 				cur.disable(direction);
+				System.out.println("Question missed!");
 				TmEventService.fireEvent("questionmiss");
 			}
 			else tryMove(direction);
+		}
+		else {
+			System.out.println("Sorry you can't move in that direction");
 		}
 	}
 	
