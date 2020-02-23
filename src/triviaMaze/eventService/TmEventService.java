@@ -3,6 +3,8 @@ package triviaMaze.eventService;
 import java.util.*;
 
 public class TmEventService {
+	// TODO: FIX THE FACT THAT EVENTS CAN BE CALLED AGAIN IN IMPROPER ORDER DUE TO EVENTS WITHIN EVENTS THAT ARE CAUGHT BY MORE THAN ONE HANDLER
+	
 	private static List<TmHandler> handlers;
 	static {
 		handlers = new LinkedList<TmHandler>();

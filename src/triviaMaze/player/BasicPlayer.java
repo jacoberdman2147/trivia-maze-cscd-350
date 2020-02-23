@@ -7,10 +7,8 @@ import triviaMaze.room.*;
 public class BasicPlayer implements IPlayer
 {
 	private IRoom cur;
-	private IRoom end;
 	
-	public BasicPlayer(IRoom start, IRoom end) {
-		this.end = end;
+	public BasicPlayer(IRoom start) {
 		cur = start;
 		addEventHandlers();
 	}
@@ -38,12 +36,6 @@ public class BasicPlayer implements IPlayer
 			@Override
 			public void fire() {
 				tryMove("down");
-			}
-		});
-		TmEventService.addHandler(new TmHandler(" "){
-			@Override
-			public void fire() {
-				System.out.println("At exit? " + (cur.equals(end)));
 			}
 		});
 	}
