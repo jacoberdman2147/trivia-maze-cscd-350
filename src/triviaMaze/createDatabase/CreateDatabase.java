@@ -6,17 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import triviaMaze.question.IMultiple;
-import triviaMaze.question.IQuestion;
+import triviaMaze.question.*;
 
 public class CreateDatabase {
 	public static void main(String[] args) throws ClassNotFoundException 
 	{
 	createTable();
-	IQuestion question = new IMultiple();
-	question.displayQuestion("1");
-	question.displayAnswers("1");
-	question.isCorrect("1", "Correct answer 1");
+	IQuestion question = new MultipleChoiceQuestion();
+	question.getQuestion();
+	question.getAnswers();
+	question.isCorrect("1");
 	}
 	private static Connection connect() {
 		String url = "jdbc:sqlite:triviaMazeData.db";
