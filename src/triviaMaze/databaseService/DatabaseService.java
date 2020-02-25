@@ -4,11 +4,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Random;
+
+import triviaMaze.question.IQuestion;
+import triviaMaze.question.Multiple;
 
 public class DatabaseService implements IDatabaseService{
 	private int multipleQuestions = 0;
 	private int trueQuestions = 0;
 	private int shortQuestions = 0;
+	private HashSet<Integer> hset = new HashSet<Integer>();
 	private Connection getConnection() {
 			String url = "jdbc:sqlite:triviaMazeData.db";
 			Connection c = null;
@@ -81,38 +87,30 @@ public class DatabaseService implements IDatabaseService{
 		}
 	}
 	
-	public String getQuestion() {
-		String result = "";
+	public IQuestion constructQuestion() {
 		Connection c = getConnection();
+		Random ran = new Random();
+		int id = 0;
+		do {
+		id = ran.nextInt(multipleQuestions - 1) + 1;
+		}while(hset.contains(id));
+		String question = "";
+		String[] answers = new String[3];
+		String correct = "";
 		try {
 			Statement stmt = c.createStatement();
-			String sql = "SELECT QUESTION FROM MULTIPLE";
+			String sql = "SELECT QUESTION, ANSWER1, ANSWER2, ANSWER3, CORRECT FROM MULTIPLE WHERE ID = id";
 			ResultSet rs = stmt.executeQuery(sql);
-			result = rs.getString("question");
+			question = rs.getString("question");
+			answers[0] = rs.getString("answer1");
+			answers[1] = rs.getString("answer2");
+			answers[2] = rs.getString("answer3");
+			correct = rs.getString("correct");
+			hset.add(id);
 		}catch(SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		return result;
-	}
-	
-	public String[] getAnswers() {
-		String[] result = new String[4];
-		Connection c = getConnection();
-		try {
-			Statement stmt = c.createStatement();
-			String sql = "SELECT ANSWER1, ANSWER2, ANSWER3, CORRECT FROM MULTIPLE";
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next())
-				result[0] = rs.getString("ANSWER1");
-				result[1] = rs.getString("ANSWER2");
-				result[2] = rs.getString("ANSWER3");
-				result[3] = rs.getString("CORRECT");
-		}catch(SQLException e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		return result;
-		
+		return new Multiple(question, answers, correct);
 	}
 }
