@@ -1,6 +1,7 @@
 package triviaMaze.DatabaseService;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,7 +27,7 @@ public class DatabaseService implements IDatabaseService{
 			return c;
 		}
 	
-	public void createTable(String tableName, String type) {
+	public void createTable(String type) {
 		try {
 			try {
 				Class.forName("org.sqlite.JDBC");
@@ -74,12 +75,17 @@ public class DatabaseService implements IDatabaseService{
 	public void addQuestionMultiple(int id, String question, String answer1, String answer2, String answer3, String correct) {
 		Connection c = getConnection();
 		try {
-		Statement stmt = c.createStatement();
-		
 		String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " +
-				 "VALUES (id, question, answer1, answer2, answer3, correct);";
-				stmt.executeUpdate(sql);
-		stmt.close();
+				 "VALUES (?, ?, ?, ?, ?, ?);";
+		PreparedStatement pstmt = c.prepareStatement(sql);
+				pstmt.setInt(1, id);
+				pstmt.setString(2, question);
+				pstmt.setString(3, answer1);
+				pstmt.setString(4, answer2);
+				pstmt.setString(5, answer3);
+				pstmt.setString(6, correct);
+				pstmt.executeUpdate();
+		pstmt.close();
 		multipleQuestions++;
 		}catch(SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -87,26 +93,30 @@ public class DatabaseService implements IDatabaseService{
 		}
 	}
 	
-	public IQuestion constructQuestion() {
+	public IQuestion constructQuestionMultiple() {
 		Connection c = getConnection();
 		Random ran = new Random();
-		int id = 0;
+		int tempID = 0;
 		do {
-		id = ran.nextInt(multipleQuestions - 1) + 1;
-		}while(hset.contains(id));
+			if(multipleQuestions == 1)
+				tempID = 1;
+			else
+		tempID = ran.nextInt(multipleQuestions - 1) + 1;
+		}while(hset.contains(tempID));
 		String question = "";
 		String[] answers = new String[3];
 		String correct = "";
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "SELECT QUESTION, ANSWER1, ANSWER2, ANSWER3, CORRECT FROM MULTIPLE WHERE ID = id";
-			ResultSet rs = stmt.executeQuery(sql);
+			String sql = "SELECT QUESTION, ANSWER1, ANSWER2, ANSWER3, CORRECT FROM MULTIPLE WHERE ID = ?";
+			PreparedStatement pstmt = c.prepareStatement(sql);
+			pstmt.setInt(1, tempID);
+			ResultSet rs = pstmt.executeQuery();
 			question = rs.getString("question");
 			answers[0] = rs.getString("answer1");
 			answers[1] = rs.getString("answer2");
 			answers[2] = rs.getString("answer3");
 			correct = rs.getString("correct");
-			hset.add(id);
+			hset.add(tempID);
 		}catch(SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);

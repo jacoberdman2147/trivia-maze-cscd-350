@@ -11,20 +11,15 @@ public class Multiple implements IQuestion {
 	}
 	@Override
 	public String getQuestion() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.question;
 	}
-
 	@Override
 	public String[] getAnswers() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.answers;
 	}
-
 	@Override
-	public boolean isCorrect(String guess) {
+	public String getCorrect() {
 		// TODO Auto-generated method stub
-		return false;
+		return this.correct;
 	}
-
 }
