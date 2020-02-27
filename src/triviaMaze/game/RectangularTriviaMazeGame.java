@@ -4,6 +4,8 @@ import triviaMaze.eventService.*;
 import triviaMaze.maze.*;
 import triviaMaze.player.*;
 import triviaMaze.inputService.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * The ITriviaMazeGame implementation in which the maze is rectangular, the
@@ -22,8 +24,12 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 
 	protected IPlayer player;
 	protected IMaze maze;
-	protected ITmInputService inputService;
+	protected transient ITmInputService inputService;
+	private Class inputServiceClass;
 	private boolean playing;
+	private boolean disabled;
+	
+	private transient List<TmHandler> hookedHandlers;
 
 	/**
 	 * Creates a new RectangularTriviaMazeGame based on the following parameters
@@ -40,16 +46,20 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 		this.maze = new LinkedRectangularMaze(xSize, ySize);
 		this.player = new BasicPlayer(maze.getStart());
 		this.inputService = inputService;
+		this.inputServiceClass = inputService.getClass();
 		this.playing = false;
+		this.disabled = false;
 	}
 
 	@Override
 	public void start() {
+		if (disabled) throw new IllegalArgumentException("Game is currently cleaned up and thus not playable");
 		playing = true;
 		addEventHandlers();
 		while (playing) {
 			TmEventService.fireEvent(inputService.getInput());
 		}
+		
 		System.out.println("Made it out of the game inside the game class");
 	}
 
@@ -59,7 +69,8 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	}
 
 	private void addEventHandlers() {
-		TmEventService.addHandler(new TmHandler("onmove") {
+		this.hookedHandlers = new LinkedList<TmHandler>();
+		hookedHandlers.add(new TmHandler("onmove") {
 			@Override
 			public void fire() {
 				if (player.getRoom().equals(maze.getEnd())) {
@@ -67,7 +78,7 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 				}
 			}
 		});
-		TmEventService.addHandler(new TmHandler("questionmiss") {
+		hookedHandlers.add(new TmHandler("questionmiss") {
 			@Override
 			public void fire() {
 				if (!maze.isTraversable(player.getRoom())) {
@@ -75,19 +86,44 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 				}
 			}
 		});
-		TmEventService.addHandler(new TmHandler("win") {
+		hookedHandlers.add(new TmHandler("win") {
 			@Override
 			public void fire() {
 				System.out.println("You win!");
 				endGame();
 			}
 		});
-		TmEventService.addHandler(new TmHandler("lose") {
+		hookedHandlers.add(new TmHandler("lose") {
 			@Override
 			public void fire() {
 				System.out.println("You lost :(");
 				endGame();
 			}
 		});
+		
+		for (TmHandler handler : hookedHandlers) {
+			TmEventService.addHandler(handler);
+		}
+	}
+	
+	public void cleanUp() {
+		if (hookedHandlers != null) {
+			for (TmHandler handler : hookedHandlers) {
+				TmEventService.removeHandler(handler);
+			}
+		}
+		player.cleanUp();
+		inputService.cleanUp();
+		this.disabled = true;
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
+		in.defaultReadObject();
+		try {
+			inputService = (ITmInputService)inputServiceClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		addEventHandlers();
 	}
 }

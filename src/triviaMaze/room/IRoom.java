@@ -1,12 +1,14 @@
 package triviaMaze.room;
 
+import java.io.*;
+
 /**
  * The interface corresponding to a room within the maze
  * 
  * @author Jacob Erdman
  *
  */
-public abstract class IRoom {
+public abstract class IRoom implements Serializable {
 
 	/**
 	 * Gets whether or not the door in the specified direction is enabled

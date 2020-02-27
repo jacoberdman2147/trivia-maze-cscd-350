@@ -1,5 +1,7 @@
 package triviaMaze.game;
 
+import java.io.*;
+
 /**
  * The interface for creating classes which represent the entire state of the
  * current game being played.
@@ -7,7 +9,7 @@ package triviaMaze.game;
  * @author Jacob Erdman
  *
  */
-public interface ITriviaMazeGame {
+public interface ITriviaMazeGame extends Serializable, triviaMaze.Cleanable {
 
 	/**
 	 * Begins the game and passes control over to this object

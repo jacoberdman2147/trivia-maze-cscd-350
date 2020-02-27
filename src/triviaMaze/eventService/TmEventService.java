@@ -72,6 +72,7 @@ public class TmEventService {
 		while (!eventQueue.isEmpty()) {
 			String message = eventQueue.remove();
 			for (int i = 0; i < handlers.size(); i++) {
+				System.out.println(handlers.get(i).trigger);
 				if (message.equals(handlers.get(i).trigger)) {
 					handlers.get(i).fire();
 				}

@@ -1,5 +1,7 @@
 package triviaMaze.room;
 
+import java.io.*;
+
 /**
  * The interface which represents links between rooms which can contain the
  * state that they have.
@@ -7,7 +9,7 @@ package triviaMaze.room;
  * @author Jacob Erdman
  *
  */
-public interface IRoomLink {
+public interface IRoomLink extends Serializable {
 
 	/**
 	 * Whether or not the link is enabled

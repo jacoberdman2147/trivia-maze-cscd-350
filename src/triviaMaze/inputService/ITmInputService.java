@@ -7,7 +7,7 @@ package triviaMaze.inputService;
  * @author Jacob Erdman
  *
  */
-public interface ITmInputService {
+public interface ITmInputService extends triviaMaze.Cleanable {
 
 	/**
 	 * Gets input from the user playing the game

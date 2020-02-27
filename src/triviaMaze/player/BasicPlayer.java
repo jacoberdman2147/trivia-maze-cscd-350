@@ -1,5 +1,6 @@
 package triviaMaze.player;
 
+import java.io.IOException;
 import java.util.*;
 import triviaMaze.eventService.*;
 import triviaMaze.room.*;
@@ -12,6 +13,7 @@ import triviaMaze.room.*;
  */
 public class BasicPlayer implements IPlayer {
 	private IRoom cur;
+	private transient List<TmHandler> hookedHandlers;
 
 	/**
 	 * Creates a BasicPlayer
@@ -25,30 +27,35 @@ public class BasicPlayer implements IPlayer {
 	}
 
 	private void addEventHandlers() {
-		TmEventService.addHandler(new TmHandler("a") {
+		hookedHandlers = new LinkedList<TmHandler>();
+		hookedHandlers.add(new TmHandler("a") {
 			@Override
 			public void fire() {
 				tryMove("left");
 			}
 		});
-		TmEventService.addHandler(new TmHandler("d") {
+		hookedHandlers.add(new TmHandler("d") {
 			@Override
 			public void fire() {
 				tryMove("right");
 			}
 		});
-		TmEventService.addHandler(new TmHandler("w") {
+		hookedHandlers.add(new TmHandler("w") {
 			@Override
 			public void fire() {
 				tryMove("up");
 			}
 		});
-		TmEventService.addHandler(new TmHandler("s") {
+		hookedHandlers.add(new TmHandler("s") {
 			@Override
 			public void fire() {
 				tryMove("down");
 			}
 		});
+		
+		for (TmHandler handler : hookedHandlers) {
+			TmEventService.addHandler(handler);
+		}
 	}
 
 	@Override
@@ -81,11 +88,23 @@ public class BasicPlayer implements IPlayer {
 	}
 
 	private boolean askQuestion() {
-		System.out.println("This is a question, reply 'test'");
+		System.out.println("This is a question, reply ''");
 		Scanner s = new Scanner(System.in);
 		String response = s.nextLine();
-		s.close();
-		return response.equals("test");
+		return response.equals("");
+	}
+	
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
+		in.defaultReadObject();
+		addEventHandlers();
+	}
+	
+	public void cleanUp() {
+		if (hookedHandlers != null) {
+			for (TmHandler handler : hookedHandlers) {
+				TmEventService.removeHandler(handler);
+			}
+		}
 	}
 
 }

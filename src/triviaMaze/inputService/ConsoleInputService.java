@@ -46,4 +46,9 @@ public class ConsoleInputService implements ITmInputService {
 		}
 	}
 
+	@Override
+	public void cleanUp() {
+		//If we close the BufferedReader, it will close System.in potentially....
+	}
+
 }

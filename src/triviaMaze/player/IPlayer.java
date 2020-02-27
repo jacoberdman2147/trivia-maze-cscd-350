@@ -1,6 +1,7 @@
 package triviaMaze.player;
 
 import triviaMaze.room.*;
+import java.io.*;
 
 /**
  * The interface to represent the player and their state
@@ -8,7 +9,7 @@ import triviaMaze.room.*;
  * @author Jacob Erdman
  *
  */
-public interface IPlayer {
+public interface IPlayer extends Serializable, triviaMaze.Cleanable{
 	/**
 	 * Gets the IRoom that the player is in
 	 * 

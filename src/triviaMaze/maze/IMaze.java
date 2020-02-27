@@ -1,6 +1,7 @@
 package triviaMaze.maze;
 
 import triviaMaze.room.*;
+import java.io.*;
 
 /**
  * Represents a set of rooms with a structure that the player can traverse in
@@ -9,7 +10,7 @@ import triviaMaze.room.*;
  * @author Jacob Erdman
  *
  */
-public interface IMaze {
+public interface IMaze extends Serializable {
 	/**
 	 * Determines whether or not the end of the maze can be reached
 	 * 
