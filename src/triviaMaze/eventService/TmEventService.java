@@ -2,23 +2,47 @@ package triviaMaze.eventService;
 
 import java.util.*;
 
+/**
+ * A static class designed to contain TmHandlers and handle events corresponding
+ * to particular strings that are fired by classes within TriviaMaze that are
+ * handled by those TmHandlers
+ * 
+ * @author Jacob Erdman
+ */
 public class TmEventService {
-	// TODO: FIX THE FACT THAT EVENTS CAN BE CALLED AGAIN IN IMPROPER ORDER DUE TO EVENTS WITHIN EVENTS THAT ARE CAUGHT BY MORE THAN ONE HANDLER
-	
+
 	private static List<TmHandler> handlers;
 	private static Queue<String> eventQueue;
 	private static boolean currentlyHandling;
-	
+
 	static {
 		handlers = new LinkedList<TmHandler>();
 		eventQueue = new LinkedList<String>();
 		currentlyHandling = false;
 	}
 	
+	//This class should have no constructor as it is designed to be a static class which java doesn't support...
+	private TmEventService() {}
+
+	/**
+	 * Adds a handler to the list of handlers
+	 * 
+	 * @param handler
+	 *            The handler to be added to the list of handlers
+	 */
 	public static void addHandler(TmHandler handler) {
 		handlers.add(handler);
 	}
-	
+
+	/**
+	 * Attempts to remove a handler from the list of TmHandlers
+	 * 
+	 * @param handler
+	 *            Handler to remove, should be a reference to one added earlier in
+	 *            order for it to be found and removed
+	 * @return Returns a boolean representing whether or not the handler was found
+	 *         and successfully removed
+	 */
 	public static boolean removeHandler(TmHandler handler) {
 		if (handlers.contains(handler)) {
 			handlers.remove(handler);
@@ -26,18 +50,29 @@ public class TmEventService {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Fires an event to this service to be caught by all corresponding TmHandlers
+	 * listening for that event. These events can be anything, but should be
+	 * standardized throughout the project so they can be caught and handled with
+	 * the same set of listeners.
+	 * 
+	 * @param message
+	 *            The name of the event to fire. Note that this parameter is case
+	 *            insensitive!
+	 */
 	public static void fireEvent(String message) {
-		eventQueue.add(message);
-		if (!currentlyHandling) handleEventQueue();
+		eventQueue.add(message.toLowerCase());
+		if (!currentlyHandling)
+			handleEventQueue();
 	}
-	
+
 	private static void handleEventQueue() {
 		currentlyHandling = true;
 		while (!eventQueue.isEmpty()) {
 			String message = eventQueue.remove();
 			for (int i = 0; i < handlers.size(); i++) {
-				if (message.equals(handlers.get(i).trigger)){ //This will likely need to be changed when swing is implemented and we can use proper key handling
+				if (message.equals(handlers.get(i).trigger)) {
 					handlers.get(i).fire();
 				}
 			}

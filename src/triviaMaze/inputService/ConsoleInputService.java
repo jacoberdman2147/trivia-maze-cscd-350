@@ -2,24 +2,40 @@ package triviaMaze.inputService;
 
 import java.io.*;
 
-import triviaMaze.eventService.TmEventService;
-
+/**
+ * This class is an InputService which takes input from the console and passes
+ * it through as an event which is then fired and handled.
+ * 
+ * @author Jacob Erdman
+ *
+ */
 public class ConsoleInputService implements ITmInputService {
 
-	BufferedReader in;
-	
+	private BufferedReader in;
+
+	/**
+	 * Creates a new ConsoleInputService in which input is read directly from
+	 * console
+	 */
 	public ConsoleInputService() {
 		in = new BufferedReader(new InputStreamReader(System.in));
 	}
-	
+
+	/**
+	 * Creates a new ConsoleInputService in which input is read directly from a file
+	 * 
+	 * @param readFile
+	 *            The File object corresponding to the file with input instructions
+	 *            to be handled. Those instructions should be on separate lines
+	 */
 	public ConsoleInputService(File readFile) {
 		try {
-		in = new BufferedReader(new FileReader(readFile));
+			in = new BufferedReader(new FileReader(readFile));
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 		}
 	}
-	
+
 	@Override
 	public String getInput() {
 		try {
@@ -29,5 +45,5 @@ public class ConsoleInputService implements ITmInputService {
 			return "";
 		}
 	}
-	
+
 }
