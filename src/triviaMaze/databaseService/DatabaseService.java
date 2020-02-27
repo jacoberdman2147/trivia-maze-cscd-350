@@ -1,4 +1,4 @@
-package triviaMaze.DatabaseService;
+package triviaMaze.databaseService;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

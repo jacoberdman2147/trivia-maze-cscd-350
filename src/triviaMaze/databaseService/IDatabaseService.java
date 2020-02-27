@@ -1,4 +1,4 @@
-package triviaMaze.DatabaseService;
+package triviaMaze.databaseService;
 
 import triviaMaze.question.IQuestion;
 
