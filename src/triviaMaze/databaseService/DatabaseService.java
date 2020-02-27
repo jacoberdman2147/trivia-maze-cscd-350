@@ -12,12 +12,12 @@ import triviaMaze.question.IQuestion;
 import triviaMaze.question.MultipleChoiceQuestion;
 
 public class DatabaseService implements IDatabaseService {
-
+	
 	private int multipleQuestions = 0;
 	private int trueQuestions = 0;
 	private int shortQuestions = 0;
 	private HashSet<Integer> hset = new HashSet<Integer>();
-
+	
 	private Connection getConnection() {
 		String url = "jdbc:sqlite:triviaMazeData.db";
 		Connection c = null;
@@ -28,7 +28,7 @@ public class DatabaseService implements IDatabaseService {
 		}
 		return c;
 	}
-
+	
 	public void createTable(String type) {
 		try {
 			try {
@@ -39,32 +39,47 @@ public class DatabaseService implements IDatabaseService {
 			}
 			Connection c = getConnection();
 			Statement stmt = c.createStatement();
-			if (type.contentEquals("multiple")) {
-				String sql = "CREATE TABLE IF NOT EXISTS MULTIPLE " + "(ID	INT	PRIMARY	KEY	NOT	NULL, " + "QUESTION	TEXT	NOT	NULL, "
-						+ "ANSWER1	TEXT	NOT	NULL, " + "ANSWER2	TEXT	NOT	NULL, " + "ANSWER3	TEXT	NOT	NULL, " + "CORRECT	TEXT	NOT	NULL) ";
-				stmt.executeUpdate(sql);
-				stmt.close();
-			} else if (type.contentEquals("true")) {
-				String sql = "CREATE TABLE IF NOT EXISTS TRUE " + "(ID	INT	PRIMARY	KEY	NOT	NULL, " + "QUESTION	TEXT	NOT	NULL, "
-						+ "ANSWER1	TEXT	NOT	NULL, " + "CORRECT	TEXT	NOT	NULL) ";
-				stmt.executeUpdate(sql);
-				stmt.close();
-			} else {
-				String sql = "CREATE TABLE IF NOT EXISTS SHORT " + "(ID	INT	PRIMARY	KEY	NOT	NULL, " + "QUESTION	TEXT	NOT	NULL, "
-						+ "CORRECT	TEXT	NOT	NULL) ";
+			if(type.contentEquals("multiple")) {
+			String sql = "CREATE TABLE IF NOT EXISTS MULTIPLE " +
+					 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
+					 "QUESTION	TEXT	NOT	NULL, " +
+					 "ANSWER1	TEXT	NOT	NULL, " +
+					 "ANSWER2	TEXT	NOT	NULL, " +
+					 "ANSWER3	TEXT	NOT	NULL, " +
+					 "CORRECT	TEXT	NOT	NULL) ";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			}
+			else if(type.contentEquals("true")) {
+				String sql = "CREATE TABLE IF NOT EXISTS TRUE " +
+						 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
+						 "QUESTION	TEXT	NOT	NULL, " +
+						 "ANSWER1	TEXT	NOT	NULL, " +
+						 "CORRECT	TEXT	NOT	NULL) ";
 				stmt.executeUpdate(sql);
 				stmt.close();
 			}
-		} catch (SQLException e) {
+			else{
+				String sql = "CREATE TABLE IF NOT EXISTS SHORT " +
+						 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
+						 "QUESTION	TEXT	NOT	NULL, " +
+						 "CORRECT	TEXT	NOT	NULL) ";
+				stmt.executeUpdate(sql);
+				stmt.close();
+			}
+		}catch(SQLException e) 
+		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			System.exit(0);	
 		}
 	}
-
-	public void addQuestionMultiple(int id, String question, String answer1, String answer2, String answer3, String correct) {
+	
+	public void addQuestionMultiple(String question, String answer1, String answer2, String answer3, String correct) {
 		Connection c = getConnection();
 		try {
-			String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " + "VALUES (?, ?, ?, ?, ?, ?);";
+			int id = multipleQuestions;
+			String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " +
+				 "VALUES (?, ?, ?, ?, ?, ?);";
 			PreparedStatement pstmt = c.prepareStatement(sql);
 			pstmt.setInt(1, id);
 			pstmt.setString(2, question);
@@ -75,12 +90,12 @@ public class DatabaseService implements IDatabaseService {
 			pstmt.executeUpdate();
 			pstmt.close();
 			multipleQuestions++;
-		} catch (SQLException e) {
+		} catch(SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 	}
-
+	
 	public IQuestion constructQuestionMultiple() {
 		Connection c = getConnection();
 		Random ran = new Random();
