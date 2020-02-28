@@ -18,6 +18,38 @@ public class DatabaseService implements IDatabaseService {
 	private int shortQuestions = 0;
 	private HashSet<Integer> hset = new HashSet<Integer>();
 	
+	public void removeMultiple(String question) {
+		Connection c = getConnection();
+		String sql = "DELETE FROM MULTIPLE WHERE QUESTION == ?";
+		try {
+			PreparedStatement pstmt = c.prepareStatement(sql);
+			pstmt.setString(1, question);
+			pstmt.executeUpdate();
+			System.out.println("This is the new table of questions");
+			displayQuestions();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void displayQuestions() {
+		Connection c = getConnection();
+		String sql = "SELECT * FROM MULTIPLE";
+		Statement stmt;
+		try {
+			stmt = c.createStatement();
+			ResultSet res = stmt.executeQuery(sql);
+			while (res.next()) {
+				System.out.println(res.getString("question"));
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private Connection getConnection() {
 		String url = "jdbc:sqlite:triviaMazeData.db";
 		Connection c = null;

@@ -10,6 +10,15 @@ public class AdminTool {
 		DatabaseService data = new DatabaseService();
 		if(type == 1 && choice == 1)
 			addMultiple(s, data);
+		if(type == 1 && choice == 2)
+			removeMultiple(s, data);
+	}
+
+	private static void removeMultiple(Scanner s, DatabaseService data) {
+		System.out.println("Which question would you like to remove out of the following questions.");
+		data.displayQuestions();
+		String dataToRemove = s.nextLine();
+		data.removeMultiple(dataToRemove);
 	}
 
 	private static void addMultiple(Scanner s, DatabaseService data) {
