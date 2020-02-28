@@ -7,7 +7,7 @@ import java.util.*;
  * An implementation of IMaze in which the maze is rectangular in structure, the
  * start is in the top left, and the end is in the bottom right
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class LinkedRectangularMaze implements IMaze {

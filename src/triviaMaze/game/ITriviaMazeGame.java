@@ -6,7 +6,7 @@ import java.io.*;
  * The interface for creating classes which represent the entire state of the
  * current game being played.
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public interface ITriviaMazeGame extends Serializable, triviaMaze.Cleanable {

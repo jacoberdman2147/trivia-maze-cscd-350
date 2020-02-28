@@ -3,7 +3,7 @@ package triviaMaze.room;
 /**
  * An implementation of IRoomLink which holds the state between rooms
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class RoomLink implements IRoomLink {

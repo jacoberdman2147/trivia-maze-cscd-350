@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * The interface corresponding to a room within the maze
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public abstract class IRoom implements Serializable {

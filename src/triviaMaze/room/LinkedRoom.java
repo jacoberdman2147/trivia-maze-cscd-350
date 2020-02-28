@@ -6,7 +6,7 @@ import java.util.UUID;
  * An IRoom implementation that has four directional IRoomLinks which store the
  * state of those links and form a maze structure when interconnected
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class LinkedRoom extends IRoom {

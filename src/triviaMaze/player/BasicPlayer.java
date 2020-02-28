@@ -8,7 +8,7 @@ import triviaMaze.room.*;
 /**
  * A simple implementation of IPlayer
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class BasicPlayer implements IPlayer {

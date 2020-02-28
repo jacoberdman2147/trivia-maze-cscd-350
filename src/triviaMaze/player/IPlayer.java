@@ -6,7 +6,7 @@ import java.io.*;
 /**
  * The interface to represent the player and their state
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public interface IPlayer extends Serializable, triviaMaze.Cleanable{

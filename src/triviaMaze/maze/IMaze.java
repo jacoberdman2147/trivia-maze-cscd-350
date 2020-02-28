@@ -7,7 +7,7 @@ import java.io.*;
  * Represents a set of rooms with a structure that the player can traverse in
  * order to win or lose the game
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public interface IMaze extends Serializable {

@@ -7,7 +7,7 @@ import java.util.*;
  * to particular strings that are fired by classes within TriviaMaze that are
  * handled by those TmHandlers
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  */
 public class TmEventService {
 

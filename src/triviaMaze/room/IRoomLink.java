@@ -6,7 +6,7 @@ import java.io.*;
  * The interface which represents links between rooms which can contain the
  * state that they have.
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public interface IRoomLink extends Serializable {
@@ -38,14 +38,14 @@ public interface IRoomLink extends Serializable {
 	/**
 	 * Gets the room at the other end of the link
 	 * 
-	 * @return
+	 * @return Returns the room at the other end of the link
 	 */
 	public IRoom getRoom();
 
 	/**
 	 * Sets the room at the other end of the link
 	 * 
-	 * @param room
+	 * @param room The IRoom to set the end of the link to
 	 */
 	public void setRoom(IRoom room);
 

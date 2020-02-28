@@ -6,7 +6,7 @@ import java.io.*;
  * This class is an InputService which takes input from the console and passes
  * it through as an event which is then fired and handled.
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class ConsoleInputService implements ITmInputService {

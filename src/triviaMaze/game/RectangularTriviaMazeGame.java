@@ -11,7 +11,7 @@ import java.util.*;
  * The ITriviaMazeGame implementation in which the maze is rectangular, the
  * start is in the top left, and the end is in the bottom right.
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public class RectangularTriviaMazeGame implements ITriviaMazeGame {

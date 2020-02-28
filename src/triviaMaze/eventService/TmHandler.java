@@ -6,7 +6,7 @@ package triviaMaze.eventService;
  * listening for is defined by the String trigger. This is essentially a
  * callback with a trigger
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public abstract class TmHandler {

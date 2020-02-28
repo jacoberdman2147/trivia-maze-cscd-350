@@ -4,7 +4,7 @@ package triviaMaze.inputService;
  * An interface defining an InputService which allows the current game to get
  * input from the user in a modular manner
  * 
- * @author Jacob Erdman
+ * @author Jacob Erdman, Randy Heckard
  *
  */
 public interface ITmInputService extends triviaMaze.Cleanable {
