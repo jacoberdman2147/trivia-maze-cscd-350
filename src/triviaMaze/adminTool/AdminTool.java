@@ -4,10 +4,12 @@ import java.util.Scanner;
 import triviaMaze.databaseService.DatabaseService;
 public class AdminTool {
 	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		int type = getType(s);
-		int choice = getChoice(s);
 		DatabaseService data = new DatabaseService();
+		data.createTable("multiple");
+		Scanner s = new Scanner(System.in);
+		//int type = getType(s); temporarily removed because we are only using multiple.
+		int type = 1;
+		int choice = getChoice(s);
 		if(type == 1 && choice == 1)
 			addMultiple(s, data);
 		if(type == 1 && choice == 2)
