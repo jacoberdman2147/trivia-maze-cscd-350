@@ -28,19 +28,17 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	private Class inputServiceClass;
 	private boolean playing;
 	private boolean disabled;
-	
+	private RectangularTriviaMazeGame circularReference = this; //I'm sorry... I had no choice.
+
 	private transient List<TmHandler> hookedHandlers;
 
 	/**
 	 * Creates a new RectangularTriviaMazeGame based on the following parameters
 	 * 
-	 * @param xSize
-	 *            The horizontal size of the maze, i.e. number of rooms
-	 * @param ySize
-	 *            The vertical size of the maze, i.e. number of rooms
-	 * @param inputService
-	 *            The service in which control should be input from to allow the
-	 *            player to interact with the game
+	 * @param xSize        The horizontal size of the maze, i.e. number of rooms
+	 * @param ySize        The vertical size of the maze, i.e. number of rooms
+	 * @param inputService The service in which control should be input from to
+	 *                     allow the player to interact with the game
 	 */
 	public RectangularTriviaMazeGame(int xSize, int ySize, ITmInputService inputService) {
 		this.maze = new LinkedRectangularMaze(xSize, ySize);
@@ -49,18 +47,19 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 		this.inputServiceClass = inputService.getClass();
 		this.playing = false;
 		this.disabled = false;
+		addEventHandlers();
 	}
 
 	@Override
 	public void start() {
-		if (disabled) throw new IllegalArgumentException("Game is currently cleaned up and thus not playable");
+		if (disabled)
+			throw new IllegalArgumentException("Game is currently cleaned up and thus not playable");
 		playing = true;
-		addEventHandlers();
 		while (playing) {
 			TmEventService.fireEvent(inputService.getInput());
 		}
-		
-		System.out.println("Made it out of the game inside the game class");
+		cleanUp();
+		System.out.println("Game exited");
 	}
 
 	private void endGame() {
@@ -100,30 +99,48 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 				endGame();
 			}
 		});
-		
+		hookedHandlers.add(new TmHandler("save") {
+			@Override
+			public void fire() {
+				try {
+					FileOutputStream f = new FileOutputStream("test.tmp");
+					ObjectOutput s = new ObjectOutputStream(f);
+					s.writeObject(circularReference);
+					s.flush();
+					s.close();
+					playing = false;
+					System.out.println("Game successfully saved.");
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.out.println("Game could not be saved...");
+				}
+			}
+		});
+
 		for (TmHandler handler : hookedHandlers) {
 			TmEventService.addHandler(handler);
 		}
 	}
-	
+
 	public void cleanUp() {
 		if (hookedHandlers != null) {
-			for (TmHandler handler : hookedHandlers) {
-				TmEventService.removeHandler(handler);
+			while (!hookedHandlers.isEmpty()) {
+				TmEventService.removeHandler(hookedHandlers.remove(0));
 			}
 		}
 		player.cleanUp();
 		inputService.cleanUp();
 		this.disabled = true;
 	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 		try {
-			inputService = (ITmInputService)inputServiceClass.newInstance();
+			inputService = (ITmInputService) inputServiceClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		playing = false;
 		addEventHandlers();
 	}
 }

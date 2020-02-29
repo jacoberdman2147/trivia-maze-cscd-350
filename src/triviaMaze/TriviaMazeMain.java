@@ -24,13 +24,7 @@ public class TriviaMazeMain {
 		}*/
 		
 		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5, new ConsoleInputService());
-		FileOutputStream f = new FileOutputStream("test.tmp");
-		ObjectOutput s = new ObjectOutputStream(f);
-		s.writeObject(game);
-		s.flush();
-		s.close();
-		f.close();
-		game.cleanUp();
+		game.start();
 		
 		FileInputStream f2 = new FileInputStream("test.tmp");
 		ObjectInput s2 = new ObjectInputStream(f2);
@@ -41,6 +35,7 @@ public class TriviaMazeMain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		f2.close();
 		System.out.println("Looks like we made it out.");
 	}
 

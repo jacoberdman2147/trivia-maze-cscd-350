@@ -101,8 +101,8 @@ public class BasicPlayer implements IPlayer {
 	
 	public void cleanUp() {
 		if (hookedHandlers != null) {
-			for (TmHandler handler : hookedHandlers) {
-				TmEventService.removeHandler(handler);
+			while (!hookedHandlers.isEmpty()) {
+				TmEventService.removeHandler(hookedHandlers.remove(0));
 			}
 		}
 	}
