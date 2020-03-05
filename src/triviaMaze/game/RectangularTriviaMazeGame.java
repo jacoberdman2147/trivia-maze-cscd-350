@@ -3,7 +3,8 @@ package triviaMaze.game;
 import triviaMaze.eventService.*;
 import triviaMaze.maze.*;
 import triviaMaze.player.*;
-import triviaMaze.inputService.*;
+import triviaMaze.userInterface.*;
+import triviaMaze.room.*;
 import java.io.*;
 import java.util.*;
 
@@ -17,130 +18,50 @@ import java.util.*;
 public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	// TODO THIS CLASS WILL NEED TO TAKE IN A REFERENCE TO THE INTERFACE ONCE WE
 	// GET THAT DEVELOPED
-	// TODO THIS CLASS WILL NEED TO TAKE IN A REFERENCE TO THE DATABASE SERVICE
-	// OR UNDERSTAND THAT A SINGLETON FOR IT EXISTS
 	// TODO MAYBE IMPLEMENT A CONSOLE INTERFACE CLASS WITH THOSE METHODS SUCH
 	// THAT WE CAN EXTEND THIS STUFF OUT
 
 	protected IPlayer player;
 	protected IMaze maze;
-	protected transient ITmInputService inputService;
-	private Class inputServiceClass;
-	private boolean playing;
-	private boolean disabled;
-	private RectangularTriviaMazeGame circularReference = this; //I'm sorry... I had no choice.
-
-	private transient List<TmHandler> hookedHandlers;
+	private IUserInterface ui;
 
 	/**
 	 * Creates a new RectangularTriviaMazeGame based on the following parameters
 	 * 
 	 * @param xSize        The horizontal size of the maze, i.e. number of rooms
 	 * @param ySize        The vertical size of the maze, i.e. number of rooms
-	 * @param inputService The service in which control should be input from to
-	 *                     allow the player to interact with the game
 	 */
-	public RectangularTriviaMazeGame(int xSize, int ySize, ITmInputService inputService) {
+	public RectangularTriviaMazeGame(int xSize, int ySize, IUserInterface ui) {
 		this.maze = new LinkedRectangularMaze(xSize, ySize);
 		this.player = new BasicPlayer(maze.getStart());
-		this.inputService = inputService;
-		this.inputServiceClass = inputService.getClass();
-		this.playing = false;
-		this.disabled = false;
-		addEventHandlers();
-	}
-
-	@Override
-	public void start() {
-		if (disabled)
-			throw new IllegalArgumentException("Game is currently cleaned up and thus not playable");
-		playing = true;
-		while (playing) {
-			TmEventService.fireEvent(inputService.getInput());
-		}
-		cleanUp();
-		System.out.println("Game exited");
-	}
-
-	private void endGame() {
-		playing = false;
-		System.out.println("The game is now over.");
-	}
-
-	private void addEventHandlers() {
-		this.hookedHandlers = new LinkedList<TmHandler>();
-		hookedHandlers.add(new TmHandler("onmove") {
-			@Override
-			public void fire() {
-				if (player.getRoom().equals(maze.getEnd())) {
-					TmEventService.fireEvent("win");
-				}
-			}
-		});
-		hookedHandlers.add(new TmHandler("questionmiss") {
-			@Override
-			public void fire() {
-				if (!maze.isTraversable(player.getRoom())) {
-					TmEventService.fireEvent("lose");
-				}
-			}
-		});
-		hookedHandlers.add(new TmHandler("win") {
-			@Override
-			public void fire() {
-				System.out.println("You win!");
-				endGame();
-			}
-		});
-		hookedHandlers.add(new TmHandler("lose") {
-			@Override
-			public void fire() {
-				System.out.println("You lost :(");
-				endGame();
-			}
-		});
-		hookedHandlers.add(new TmHandler("save") {
-			@Override
-			public void fire() {
-				try {
-					FileOutputStream f = new FileOutputStream("test.tmp");
-					ObjectOutput s = new ObjectOutputStream(f);
-					s.writeObject(circularReference);
-					s.flush();
-					s.close();
-					playing = false;
-					System.out.println("Game successfully saved.");
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("Game could not be saved...");
-				}
-			}
-		});
-
-		for (TmHandler handler : hookedHandlers) {
-			TmEventService.addHandler(handler);
-		}
-	}
-
-	public void cleanUp() {
-		if (hookedHandlers != null) {
-			while (!hookedHandlers.isEmpty()) {
-				TmEventService.removeHandler(hookedHandlers.remove(0));
-			}
-		}
-		player.cleanUp();
-		inputService.cleanUp();
-		this.disabled = true;
+		this.ui = ui;
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		try {
-			inputService = (ITmInputService) inputServiceClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+	}
+
+	@Override
+	public boolean tryMove(String direction) {
+		IRoom cur = player.getRoom();
+		boolean success = false;
+		if (!cur.isAnswered(direction)) {
+			success = ui.askQuestion();
+			cur.answer(direction);
+			if (!success) {
+				cur.disable(direction);
+				System.out.println("Question missed!");
+				boolean lose = maze.isTraversable(cur);
+				if (lose) ui.onLose();
+			}
 		}
-		playing = false;
-		addEventHandlers();
+		if (cur.isEnabled(direction)) {
+			player.move(cur.getRoom(direction));
+			success = true;
+			if (player.getRoom().equals(maze.getEnd())) {
+				ui.onWin();
+			}
+		}
+		return success;
 	}
 }

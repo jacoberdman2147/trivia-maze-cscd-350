@@ -3,7 +3,7 @@ package triviaMaze;
 /**
  * An interface designed to allow a class to remove its event handlers and clean itself up so that old event handlers will not cause problems
  * @author Jacob Erdman, Randy Heckard
- *
+ * @deprecated
  */
 public interface Cleanable {
 	

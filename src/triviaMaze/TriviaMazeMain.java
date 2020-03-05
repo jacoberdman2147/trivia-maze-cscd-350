@@ -23,7 +23,7 @@ public class TriviaMazeMain {
 			e.printStackTrace();
 		}*/
 		
-		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5, new ConsoleInputService());
+		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5);
 		game.start();
 		
 		FileInputStream f2 = new FileInputStream("test.tmp");

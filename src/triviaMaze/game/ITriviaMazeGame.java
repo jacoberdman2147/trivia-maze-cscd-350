@@ -9,10 +9,8 @@ import java.io.*;
  * @author Jacob Erdman, Randy Heckard
  *
  */
-public interface ITriviaMazeGame extends Serializable, triviaMaze.Cleanable {
-
-	/**
-	 * Begins the game and passes control over to this object
-	 */
-	public void start();
+public interface ITriviaMazeGame extends Serializable {
+	
+	public boolean tryMove(String direction);
+	
 }
