@@ -5,7 +5,7 @@ package triviaMaze.inputService;
  * input from the user in a modular manner
  * 
  * @author Jacob Erdman, Randy Heckard
- *
+ * @deprecated
  */
 public interface ITmInputService extends triviaMaze.Cleanable {
 

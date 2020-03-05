@@ -7,7 +7,7 @@ import java.io.*;
  * it through as an event which is then fired and handled.
  * 
  * @author Jacob Erdman, Randy Heckard
- *
+ * @deprecated
  */
 public class ConsoleInputService implements ITmInputService {
 

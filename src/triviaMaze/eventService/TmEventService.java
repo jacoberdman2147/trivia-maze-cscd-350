@@ -8,6 +8,7 @@ import java.util.*;
  * handled by those TmHandlers
  * 
  * @author Jacob Erdman, Randy Heckard
+ * @deprecated
  */
 public class TmEventService {
 
