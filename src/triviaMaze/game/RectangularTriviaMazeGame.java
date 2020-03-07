@@ -64,4 +64,9 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 		}
 		return success;
 	}
+
+	@Override
+	public IRoom getCurrentRoom() {
+		return player.getRoom();
+	}
 }

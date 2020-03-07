@@ -6,6 +6,7 @@ import triviaMaze.game.ITriviaMazeGame;
 import triviaMaze.game.*;
 import triviaMaze.inputService.*;
 import java.lang.reflect.*;
+import triviaMaze.userInterface.*;
 
 public class TriviaMazeMain {
 
@@ -23,7 +24,7 @@ public class TriviaMazeMain {
 			e.printStackTrace();
 		}*/
 		
-		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5, null);
+		/*ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5, null);
 		
 		FileInputStream f2 = new FileInputStream("test.tmp");
 		ObjectInput s2 = new ObjectInputStream(f2);
@@ -34,7 +35,17 @@ public class TriviaMazeMain {
 			e.printStackTrace();
 		}
 		f2.close();
-		System.out.println("Looks like we made it out.");
+		System.out.println("Looks like we made it out.");*/
+		Scanner s = new Scanner(System.in);
+		int test = 0;
+		while (test == 0) {
+		if (s.hasNextInt()) {
+			test = s.nextInt();
+		} else s.nextLine();
+		}
+		IUserInterface ui = new ConsoleInterface();
+		ui.begin();
+		
 	}
 
 }

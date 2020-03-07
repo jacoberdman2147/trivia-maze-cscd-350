@@ -1,6 +1,8 @@
 package triviaMaze.game;
 
 import java.io.*;
+import triviaMaze.room.*;
+
 
 /**
  * The interface for creating classes which represent the entire state of the
@@ -12,5 +14,6 @@ import java.io.*;
 public interface ITriviaMazeGame extends Serializable {
 	
 	public boolean tryMove(String direction);
+	public IRoom getCurrentRoom();
 	
 }
