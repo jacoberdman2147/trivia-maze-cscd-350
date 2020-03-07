@@ -23,14 +23,12 @@ public class TriviaMazeMain {
 			e.printStackTrace();
 		}*/
 		
-		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5);
-		game.start();
+		ITriviaMazeGame game = new RectangularTriviaMazeGame(5, 5, null);
 		
 		FileInputStream f2 = new FileInputStream("test.tmp");
 		ObjectInput s2 = new ObjectInputStream(f2);
 		try {
 			game = (RectangularTriviaMazeGame)s2.readObject();
-			game.start();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
