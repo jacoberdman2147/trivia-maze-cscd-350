@@ -2,6 +2,7 @@ package triviaMaze.game;
 
 import java.io.*;
 import triviaMaze.room.*;
+import triviaMaze.userInterface.*;
 
 
 /**
@@ -15,5 +16,6 @@ public interface ITriviaMazeGame extends Serializable {
 	
 	public boolean tryMove(String direction);
 	public IRoom getCurrentRoom();
+	public void setUi(IUserInterface ui);
 	
 }

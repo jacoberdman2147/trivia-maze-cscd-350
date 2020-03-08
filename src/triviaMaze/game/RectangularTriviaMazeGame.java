@@ -23,7 +23,7 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 
 	protected IPlayer player;
 	protected IMaze maze;
-	private IUserInterface ui;
+	private transient IUserInterface ui;
 
 	/**
 	 * Creates a new RectangularTriviaMazeGame based on the following parameters
@@ -34,6 +34,10 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	public RectangularTriviaMazeGame(int xSize, int ySize, IUserInterface ui) {
 		this.maze = new LinkedRectangularMaze(xSize, ySize);
 		this.player = new BasicPlayer(maze.getStart());
+		this.ui = ui;
+	}
+	
+	public void setUi(IUserInterface ui) {
 		this.ui = ui;
 	}
 

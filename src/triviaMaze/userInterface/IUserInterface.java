@@ -9,7 +9,7 @@ public interface IUserInterface {
 	public void onWin();
 	public boolean askQuestion();
 	public void showStatus(String status);
-	public String getHelpString();
+	public void showHelp();
 	public void showMenu();
 	public void loadGame();
 	public void saveGame();

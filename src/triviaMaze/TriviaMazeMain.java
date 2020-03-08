@@ -1,5 +1,7 @@
 package triviaMaze;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.*;
 import java.util.*;
 import triviaMaze.game.ITriviaMazeGame;
@@ -7,6 +9,10 @@ import triviaMaze.game.*;
 import triviaMaze.inputService.*;
 import java.lang.reflect.*;
 import triviaMaze.userInterface.*;
+import triviaMaze.databaseService.*;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 public class TriviaMazeMain {
 
@@ -36,16 +42,20 @@ public class TriviaMazeMain {
 		}
 		f2.close();
 		System.out.println("Looks like we made it out.");*/
-		Scanner s = new Scanner(System.in);
+		
+		/*Scanner s = new Scanner(System.in);
 		int test = 0;
 		while (test == 0) {
 		if (s.hasNextInt()) {
 			test = s.nextInt();
 		} else s.nextLine();
 		}
-		IUserInterface ui = new ConsoleInterface();
-		ui.begin();
+		IUserInterface ui = new ConsoleInterface(new DatabaseService());
+		ui.begin();*/
 		
+		IDatabaseService databaseSvc = new DatabaseService();
+		IUserInterface ui = new ConsoleInterface(databaseSvc);
+		ui.begin();
 	}
 
 }
