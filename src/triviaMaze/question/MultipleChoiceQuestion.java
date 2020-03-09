@@ -4,6 +4,7 @@ public class MultipleChoiceQuestion implements IQuestion {
 	private String question;
 	private String[] answers;
 	private String correct;
+	
 	public MultipleChoiceQuestion(String question, String[] answers, String correct) {
 		this.question = question;
 		this.answers = answers;
@@ -19,7 +20,6 @@ public class MultipleChoiceQuestion implements IQuestion {
 	}
 	@Override
 	public String getCorrect() {
-		// TODO Auto-generated method stub
 		return this.correct;
 	}
 }

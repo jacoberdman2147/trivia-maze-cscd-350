@@ -13,18 +13,20 @@ import triviaMaze.question.MultipleChoiceQuestion;
 
 public class DatabaseService implements IDatabaseService {
 	
-	private int multipleQuestions = 0;
-	private int trueQuestions = 0;
-	private int shortQuestions = 0;
 	private HashSet<Integer> hset = new HashSet<Integer>();
 	
-	public void removeMultiple(String question) {
+	public void removeMultiple(String question) 
+	{
 		Connection c = getConnection();
 		String sql = "DELETE FROM MULTIPLE WHERE QUESTION == ?";
 		try {
 			PreparedStatement pstmt = c.prepareStatement(sql);
 			pstmt.setString(1, question);
-			pstmt.executeUpdate();
+			int rowsAltered = pstmt.executeUpdate();
+			pstmt.close();
+			if(rowsAltered > 0)
+			decreaseQuestions();
+			System.out.println("There are now " + numberOfQuestions() + " questions in the table");
 			System.out.println("This is the new table of questions");
 			displayQuestions();
 		} catch (SQLException e) {
@@ -33,7 +35,53 @@ public class DatabaseService implements IDatabaseService {
 		}
 	}
 	
-	public void displayQuestions() {
+	public int numberOfQuestions()
+	{
+		Connection c = getConnection();
+		String sql = "SELECT COUNT FROM QUESTIONS";
+		Statement stmt;
+		try {
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			int result = rs.getInt("count");
+			stmt.close();
+			return result;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	public void increaseQuestions()
+	{
+		Connection c = getConnection();
+		String sql = "UPDATE QUESTIONS SET COUNT = COUNT + 1;";
+		try 
+		{
+			Statement stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void decreaseQuestions()
+	{
+		Connection c = getConnection();
+		String sql = "UPDATE QUESTIONS SET COUNT = COUNT - 1;";
+		try 
+		{
+			Statement stmt = c.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void displayQuestions() 
+	{
 		Connection c = getConnection();
 		String sql = "SELECT * FROM MULTIPLE";
 		Statement stmt;
@@ -43,6 +91,7 @@ public class DatabaseService implements IDatabaseService {
 			while (res.next()) {
 				System.out.println(res.getString("question"));
 			}
+			System.out.println("There are " + numberOfQuestions() + " questions in the database.");
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -50,7 +99,8 @@ public class DatabaseService implements IDatabaseService {
 		}
 	}
 	
-	private Connection getConnection() {
+	private Connection getConnection() 
+	{
 		String url = "jdbc:sqlite:triviaMazeData.db";
 		Connection c = null;
 		try {
@@ -61,7 +111,8 @@ public class DatabaseService implements IDatabaseService {
 		return c;
 	}
 	
-	public void createTable(String type) {
+	public void createTable(String type) 
+	{
 		try {
 			try {
 				Class.forName("org.sqlite.JDBC");
@@ -82,12 +133,12 @@ public class DatabaseService implements IDatabaseService {
 			stmt.executeUpdate(sql);
 			stmt.close();
 			}
-			else if(type.contentEquals("true")) {
-				String sql = "CREATE TABLE IF NOT EXISTS TRUE " +
-						 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
-						 "QUESTION	TEXT	NOT	NULL, " +
-						 "ANSWER1	TEXT	NOT	NULL, " +
-						 "CORRECT	TEXT	NOT	NULL) ";
+			else if(type.contentEquals("numberQuestions")) {
+				String sql = "CREATE TABLE IF NOT EXISTS QUESTIONS " +
+						 "(COUNT	INT	PRIMARY	KEY	NOT	NULL) ";
+				stmt.executeUpdate(sql);
+				sql = "INSERT OR IGNORE INTO QUESTIONS (COUNT) " +
+				"VALUES(0);";
 				stmt.executeUpdate(sql);
 				stmt.close();
 			}
@@ -106,10 +157,11 @@ public class DatabaseService implements IDatabaseService {
 		}
 	}
 	
-	public void addQuestionMultiple(String question, String answer1, String answer2, String answer3, String correct) {
+	public void addQuestionMultiple(String question, String answer1, String answer2, String answer3, String correct) 
+	{
 		Connection c = getConnection();
 		try {
-			int id = multipleQuestions;
+			int id = numberOfQuestions();
 			String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " +
 				 "VALUES (?, ?, ?, ?, ?, ?);";
 			PreparedStatement pstmt = c.prepareStatement(sql);
@@ -121,22 +173,24 @@ public class DatabaseService implements IDatabaseService {
 			pstmt.setString(6, correct);
 			pstmt.executeUpdate();
 			pstmt.close();
-			multipleQuestions++;
+			increaseQuestions();
+			System.out.println("There are now " + numberOfQuestions() + " questions in the table");
 		} catch(SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 	}
 	
-	public IQuestion constructQuestionMultiple() {
+	public IQuestion constructQuestionMultiple() 
+	{
 		Connection c = getConnection();
 		Random ran = new Random();
 		int tempID = 0;
 		do {
-			if (multipleQuestions == 1)
+			if (numberOfQuestions() == 1)
 				tempID = 1;
 			else
-				tempID = ran.nextInt(multipleQuestions - 1) + 1;
+				tempID = ran.nextInt(numberOfQuestions() - 1) + 1;
 		} while (hset.contains(tempID));
 		String question = "";
 		String[] answers = new String[3];

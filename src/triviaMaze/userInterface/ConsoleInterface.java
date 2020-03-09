@@ -173,8 +173,35 @@ public class ConsoleInterface implements IUserInterface{
 
 	@Override
 	public boolean askQuestion() {
-		// TODO: THIS METHOD IS UNIMPLEMENTED
-		return true;
+		IQuestion question = databaseSvc.constructQuestionMultiple();
+		Random ran = new Random();
+		int choice;
+		HashSet<Integer> hset = new HashSet<Integer>();
+		System.out.println(question.getQuestion());
+		String[] answers = question.getAnswers();
+		String correct = question.getCorrect();
+		for(int count = 0; count < 4;)
+		{
+			choice = ran.nextInt(4);
+			if(!hset.contains(choice)) 
+			{
+				if(choice == 3)
+				{
+					System.out.println(correct);
+					count++;
+				}
+				else
+				{
+					System.out.println(answers[choice]);
+					count++;
+				}
+			hset.add(choice);
+			}
+		}
+		if(in.nextLine().equals(question.getCorrect()))
+			return true;
+		else
+			return false;
 	}
 
 	@Override
