@@ -107,6 +107,7 @@ public class ConsoleInterface implements IUserInterface{
 	public void begin() {
 		showStatus("Welcome to the maze. Enter \"?\" for help.");
 		while (!exit) {
+			clearStatus();
 			showMenu();
 			while (inProgress) {
 				updateDisplay();
@@ -306,6 +307,12 @@ public class ConsoleInterface implements IUserInterface{
 	
 	private void clearScreen() {
 		System.out.println(clearString);
+	}
+	
+	private void clearStatus() {
+		for(int i = 0; i < statusLines.length; i++) {
+			statusLines[i] = "";
+		}
 	}
 
 }
