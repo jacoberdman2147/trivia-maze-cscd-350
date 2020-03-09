@@ -49,21 +49,20 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	public boolean tryMove(String direction) {
 		IRoom cur = player.getRoom();
 		boolean success = false;
-		if (!cur.isAnswered(direction)) {
+		if (!cur.isAnswered(direction) && cur.isEnabled(direction)) {
 			success = ui.askQuestion();
 			cur.answer(direction);
 			if (!success) {
 				cur.disable(direction);
-				System.out.println("Question missed!");
 				boolean lose = maze.isTraversable(cur);
-				if (lose) ui.onLose();
+				if (lose) ui.onLose(direction);
 			}
 		}
 		if (cur.isEnabled(direction)) {
 			player.move(cur.getRoom(direction));
 			success = true;
 			if (player.getRoom().equals(maze.getEnd())) {
-				ui.onWin();
+				ui.onWin(direction);
 			}
 		}
 		return success;

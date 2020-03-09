@@ -5,8 +5,8 @@ import triviaMaze.maze.*;
 public interface IUserInterface {
 	public void begin();
 	public void updateDisplay();
-	public void onLose();
-	public void onWin();
+	public void onLose(String direction);
+	public void onWin(String direction);
 	public boolean askQuestion();
 	public void showStatus(String status);
 	public void showHelp();

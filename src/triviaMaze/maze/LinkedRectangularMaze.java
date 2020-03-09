@@ -33,12 +33,12 @@ public class LinkedRectangularMaze implements IMaze {
 															// avoid dealing
 															// with boundary
 															// conditions
-		for (int i = 1; i < height; i++) {
+		for (int i = 1; i < height + 1; i++) {
 			for (int j = 1; j < width + 1; j++) {
 				rooms[i][j] = new LinkedRoom();
 			}
 		}
-		for (int i = 1; i < height; i++) {
+		for (int i = 1; i < height + 1; i++) {
 			for (int j = 1; j < width + 1; j++) {
 				assignRoomLinks(rooms, i, j);
 			}

@@ -112,8 +112,6 @@ public class ConsoleInterface implements IUserInterface{
 				updateDisplay();
 				handleInput(in.nextLine());
 			}
-			updateDisplay();
-			
 		}
 	}
 
@@ -134,7 +132,7 @@ public class ConsoleInterface implements IUserInterface{
 	}
 	
 	private char roomChar(IRoom cur, String dir) {
-		if (!cur.isAnswered(dir)) return '+';
+		if (!cur.isAnswered(dir) && cur.isEnabled(dir)) return '+';
 		else if (cur.isEnabled(dir)) return ' ';
 		else {
 			switch (dir) {
@@ -151,17 +149,25 @@ public class ConsoleInterface implements IUserInterface{
 	}
 
 	@Override
-	public void onLose() {
+	public void onLose(String direction) {
 		// :(
 		inProgress = false;
+		showStatus("You cannot move " + direction + ".");
 		showStatus("Game over!");
+		updateDisplay();
+		System.out.println("Press enter to continue...");
+		in.nextLine();
 	}
 
 	@Override
-	public void onWin() {
+	public void onWin(String direction) {
 		// :)
 		inProgress = false;
+		showStatus("Moved " + direction + ".");
 		showStatus("You win! Congratulations!");
+		updateDisplay();
+		System.out.println("Press enter to continue...");
+		in.nextLine();
 	}
 
 	@Override
