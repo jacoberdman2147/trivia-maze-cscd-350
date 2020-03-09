@@ -16,6 +16,7 @@ public class ConsoleInterface implements IUserInterface{
 	private String[] statusLines;
 	private Scanner in;
 	private LinkedHashMap<String, IInterfaceFunction> inputFunctions;
+	private String clearString;
 	
 	
 	
@@ -23,10 +24,19 @@ public class ConsoleInterface implements IUserInterface{
 		exit = false;
 		inProgress = false;
 		this.databaseSvc = databaseSvc;
-		statusLines = new String[2];
+		statusLines = new String[4];
+		for(int i = 0; i < statusLines.length; i++) {
+			statusLines[i] = "";
+		}
 		in = new Scanner(System.in);
 		inputFunctions = new LinkedHashMap<String, IInterfaceFunction>();
 		setupInputs();
+		
+		StringBuilder s = new StringBuilder();
+		for (int i = 0; i < 50; i++) {
+			s.append("\n");
+		}
+		clearString = s.toString();
 	}
 	
 	private void setupInputs() {
@@ -109,11 +119,13 @@ public class ConsoleInterface implements IUserInterface{
 
 	@Override
 	public void updateDisplay() {
+		clearScreen();
 		for (String status : statusLines) {
 			System.out.println(status);
 		}
 		IRoom cur = game.getCurrentRoom();
 		displayRoom(cur);
+		System.out.println("\r\n");
 	}
 	
 	private void displayRoom(IRoom cur) {
@@ -160,10 +172,10 @@ public class ConsoleInterface implements IUserInterface{
 
 	@Override
 	public void showStatus(String status) {
-		for (int i = statusLines.length - 1; i > 0; i--) {
-			statusLines[i] = statusLines[i - 1];
+		for (int i = 0; i < statusLines.length - 1; i++) {
+			statusLines[i] = statusLines[i + 1];
 		}
-		statusLines[0] = status;
+		statusLines[statusLines.length - 1] = status;
 	}
 	
 	@Override
@@ -280,13 +292,14 @@ public class ConsoleInterface implements IUserInterface{
 		while (ret < low || ret > high) {
 			if (in.hasNextInt()) {
 				ret = in.nextInt();
+				in.nextLine();
 			} else in.nextLine();
 		}
 		return ret;
 	}
 	
 	private void clearScreen() {
-		System.out.println(new String(new char[50]).replace("\0", "\r\n"));
+		System.out.println(clearString);
 	}
 
 }
