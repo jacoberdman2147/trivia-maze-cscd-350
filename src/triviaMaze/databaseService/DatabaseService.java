@@ -135,7 +135,7 @@ public class DatabaseService implements IDatabaseService {
 			}
 			else if(type.contentEquals("numberQuestions")) {
 				String sql = "CREATE TABLE IF NOT EXISTS QUESTIONS " +
-						 "(COUNT	INT	PRIMARY	KEY	NOT	NULL) ";
+						 "(COUNT	INT	NOT	NULL) ";
 				stmt.executeUpdate(sql);
 				sql = "INSERT OR IGNORE INTO QUESTIONS (COUNT) " +
 				"VALUES(0);";

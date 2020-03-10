@@ -180,14 +180,17 @@ public class ConsoleInterface implements IUserInterface{
 		System.out.println(question.getQuestion());
 		String[] answers = question.getAnswers();
 		String correct = question.getCorrect();
+		int correctNumber = 0;
 		for(int count = 0; count < 4;)
 		{
 			choice = ran.nextInt(4);
 			if(!hset.contains(choice)) 
 			{
+				System.out.print(count + 1 + ". ");
 				if(choice == 3)
 				{
 					System.out.println(correct);
+					correctNumber = count + 1;
 					count++;
 				}
 				else
@@ -198,7 +201,7 @@ public class ConsoleInterface implements IUserInterface{
 			hset.add(choice);
 			}
 		}
-		if(in.nextLine().equals(question.getCorrect()))
+		if(in.nextLine().equals(Integer.toString(correctNumber)))
 			return true;
 		else
 			return false;
