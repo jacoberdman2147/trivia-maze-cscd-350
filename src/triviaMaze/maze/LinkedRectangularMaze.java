@@ -28,6 +28,7 @@ public class LinkedRectangularMaze implements IMaze {
 	}
 
 	private void createMazeStructure(int height, int width) {
+		if (height < 1 || width < 1) throw new IllegalArgumentException("Height and width must both be greater than 0");
 		IRoom[][] rooms = new IRoom[height + 2][width + 2]; // Creates a buffer
 															// on the outside to
 															// avoid dealing

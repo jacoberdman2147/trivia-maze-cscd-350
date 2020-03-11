@@ -77,7 +77,7 @@ public class ConsoleInterface implements IUserInterface{
 			@Override
 			public void execute() {
 				inProgress = false;
-				showStatus("Game exited, hit enter to continue...");
+				System.out.println("Game exited, hit enter to continue...");
 				in.nextLine();
 			}
 
@@ -105,10 +105,10 @@ public class ConsoleInterface implements IUserInterface{
 
 	@Override
 	public void begin() {
-		showStatus("Welcome to the maze. Enter \"?\" for help.");
 		while (!exit) {
 			clearStatus();
 			showMenu();
+			showStatus("Welcome to the maze. Enter \"?\" for help.");
 			while (inProgress) {
 				updateDisplay();
 				handleInput(in.nextLine());
