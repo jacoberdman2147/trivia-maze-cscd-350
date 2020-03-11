@@ -54,8 +54,8 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 			cur.answer(direction);
 			if (!success) {
 				cur.disable(direction);
-				boolean lose = maze.isTraversable(cur);
-				if (lose) ui.onLose(direction);
+				boolean traversable = maze.isTraversable(cur);
+				if (!traversable) ui.onLose(direction);
 			}
 		}
 		if (cur.isEnabled(direction)) {
