@@ -12,11 +12,10 @@ import triviaMaze.question.IQuestion;
 import triviaMaze.question.MultipleChoiceQuestion;
 
 public class DatabaseService implements IDatabaseService {
-	
+
 	private HashSet<Integer> hset = new HashSet<Integer>();
-	
-	public void removeMultiple(String question) 
-	{
+
+	public void removeMultiple(String question) {
 		Connection c = getConnection();
 		String sql = "DELETE FROM MULTIPLE WHERE QUESTION == ?";
 		try {
@@ -24,8 +23,8 @@ public class DatabaseService implements IDatabaseService {
 			pstmt.setString(1, question);
 			int rowsAltered = pstmt.executeUpdate();
 			pstmt.close();
-			if(rowsAltered > 0)
-			decreaseQuestions();
+			if (rowsAltered > 0)
+				decreaseQuestions();
 			System.out.println("There are now " + numberOfQuestions() + " questions in the table");
 			System.out.println("This is the new table of questions");
 			displayQuestions();
@@ -34,9 +33,8 @@ public class DatabaseService implements IDatabaseService {
 			e.printStackTrace();
 		}
 	}
-	
-	public int numberOfQuestions()
-	{
+
+	public int numberOfQuestions() {
 		Connection c = getConnection();
 		String sql = "SELECT COUNT FROM QUESTIONS";
 		Statement stmt;
@@ -46,42 +44,37 @@ public class DatabaseService implements IDatabaseService {
 			int result = rs.getInt("count");
 			stmt.close();
 			return result;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
 		}
 	}
 
-	public void increaseQuestions()
-	{
+	public void increaseQuestions() {
 		Connection c = getConnection();
 		String sql = "UPDATE QUESTIONS SET COUNT = COUNT + 1;";
-		try 
-		{
+		try {
 			Statement stmt = c.createStatement();
 			stmt.executeUpdate(sql);
 			stmt.close();
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void decreaseQuestions()
-	{
+
+	public void decreaseQuestions() {
 		Connection c = getConnection();
 		String sql = "UPDATE QUESTIONS SET COUNT = COUNT - 1;";
-		try 
-		{
+		try {
 			Statement stmt = c.createStatement();
 			stmt.executeUpdate(sql);
 			stmt.close();
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void displayQuestions() 
-	{
+
+	public void displayQuestions() {
 		Connection c = getConnection();
 		String sql = "SELECT * FROM MULTIPLE";
 		Statement stmt;
@@ -98,9 +91,8 @@ public class DatabaseService implements IDatabaseService {
 			e.printStackTrace();
 		}
 	}
-	
-	private Connection getConnection() 
-	{
+
+	private Connection getConnection() {
 		String url = "jdbc:sqlite:triviaMazeData.db";
 		Connection c = null;
 		try {
@@ -110,9 +102,8 @@ public class DatabaseService implements IDatabaseService {
 		}
 		return c;
 	}
-	
-	public void createTable(String type) 
-	{
+
+	public void createTable(String type) {
 		try {
 			try {
 				Class.forName("org.sqlite.JDBC");
@@ -122,48 +113,34 @@ public class DatabaseService implements IDatabaseService {
 			}
 			Connection c = getConnection();
 			Statement stmt = c.createStatement();
-			if(type.contentEquals("multiple")) {
-			String sql = "CREATE TABLE IF NOT EXISTS MULTIPLE " +
-					 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
-					 "QUESTION	TEXT	NOT	NULL, " +
-					 "ANSWER1	TEXT	NOT	NULL, " +
-					 "ANSWER2	TEXT	NOT	NULL, " +
-					 "ANSWER3	TEXT	NOT	NULL, " +
-					 "CORRECT	TEXT	NOT	NULL) ";
-			stmt.executeUpdate(sql);
-			stmt.close();
-			}
-			else if(type.contentEquals("numberQuestions")) {
-				String sql = "CREATE TABLE IF NOT EXISTS QUESTIONS " +
-						 "(COUNT	INT	NOT	NULL) ";
+			if (type.contentEquals("multiple")) {
+				String sql = "CREATE TABLE IF NOT EXISTS MULTIPLE " + "(ID	INT	PRIMARY	KEY	NOT	NULL, " + "QUESTION	TEXT	NOT	NULL, "
+						+ "ANSWER1	TEXT	NOT	NULL, " + "ANSWER2	TEXT	NOT	NULL, " + "ANSWER3	TEXT	NOT	NULL, " + "CORRECT	TEXT	NOT	NULL) ";
 				stmt.executeUpdate(sql);
-				sql = "INSERT OR IGNORE INTO QUESTIONS (COUNT) " +
-				"VALUES(0);";
+				stmt.close();
+			} else if (type.contentEquals("numberQuestions")) {
+				String sql = "CREATE TABLE IF NOT EXISTS QUESTIONS " + "(COUNT	INT	NOT	NULL) ";
+				stmt.executeUpdate(sql);
+				sql = "INSERT OR IGNORE INTO QUESTIONS (COUNT) " + "VALUES(0);";
+				stmt.executeUpdate(sql);
+				stmt.close();
+			} else {
+				String sql = "CREATE TABLE IF NOT EXISTS SHORT " + "(ID	INT	PRIMARY	KEY	NOT	NULL, " + "QUESTION	TEXT	NOT	NULL, "
+						+ "CORRECT	TEXT	NOT	NULL) ";
 				stmt.executeUpdate(sql);
 				stmt.close();
 			}
-			else{
-				String sql = "CREATE TABLE IF NOT EXISTS SHORT " +
-						 "(ID	INT	PRIMARY	KEY	NOT	NULL, " +
-						 "QUESTION	TEXT	NOT	NULL, " +
-						 "CORRECT	TEXT	NOT	NULL) ";
-				stmt.executeUpdate(sql);
-				stmt.close();
-			}
-		}catch(SQLException e) 
-		{
+		} catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);	
+			System.exit(0);
 		}
 	}
-	
-	public void addQuestionMultiple(String question, String answer1, String answer2, String answer3, String correct) 
-	{
+
+	public void addQuestionMultiple(String question, String answer1, String answer2, String answer3, String correct) {
 		Connection c = getConnection();
 		try {
 			int id = numberOfQuestions();
-			String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " +
-				 "VALUES (?, ?, ?, ?, ?, ?);";
+			String sql = "INSERT OR IGNORE INTO MULTIPLE (ID,QUESTION,ANSWER1,ANSWER2,ANSWER3,CORRECT) " + "VALUES (?, ?, ?, ?, ?, ?);";
 			PreparedStatement pstmt = c.prepareStatement(sql);
 			pstmt.setInt(1, id);
 			pstmt.setString(2, question);
@@ -175,14 +152,13 @@ public class DatabaseService implements IDatabaseService {
 			pstmt.close();
 			increaseQuestions();
 			System.out.println("There are now " + numberOfQuestions() + " questions in the table");
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
 	}
-	
-	public IQuestion constructQuestionMultiple() 
-	{
+
+	public IQuestion constructQuestionMultiple() {
 		Connection c = getConnection();
 		Random ran = new Random();
 		int tempID = 0;

@@ -28,15 +28,17 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 	/**
 	 * Creates a new RectangularTriviaMazeGame based on the following parameters
 	 * 
-	 * @param xSize        The horizontal size of the maze, i.e. number of rooms
-	 * @param ySize        The vertical size of the maze, i.e. number of rooms
+	 * @param xSize
+	 *            The horizontal size of the maze, i.e. number of rooms
+	 * @param ySize
+	 *            The vertical size of the maze, i.e. number of rooms
 	 */
 	public RectangularTriviaMazeGame(int xSize, int ySize, IUserInterface ui) {
 		this.maze = new LinkedRectangularMaze(xSize, ySize);
 		this.player = new BasicPlayer(maze.getStart());
 		this.ui = ui;
 	}
-	
+
 	public void setUi(IUserInterface ui) {
 		this.ui = ui;
 	}
@@ -55,7 +57,8 @@ public class RectangularTriviaMazeGame implements ITriviaMazeGame {
 			if (!success) {
 				cur.disable(direction);
 				boolean traversable = maze.isTraversable(cur);
-				if (!traversable) ui.onLose(direction);
+				if (!traversable)
+					ui.onLose(direction);
 			}
 		}
 		if (cur.isEnabled(direction)) {

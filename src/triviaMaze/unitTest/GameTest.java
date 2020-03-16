@@ -18,7 +18,7 @@ class GameTest {
 	private ITriviaMazeGame game;
 	private static final int height = 5;
 	private static final int width = 5;
-	
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
@@ -30,7 +30,7 @@ class GameTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		ui = new NullInterface();
-		game = new RectangularTriviaMazeGame(height,width,ui);
+		game = new RectangularTriviaMazeGame(height, width, ui);
 	}
 
 	@AfterEach
@@ -48,13 +48,13 @@ class GameTest {
 		assertEquals(game.tryMove("down"), false);
 		assertEquals(game.getCurrentRoom(), cur.getRoom("right"));
 	}
-	
+
 	@Test
 	void invalidMovementTest() {
 		assertEquals(game.tryMove("left"), false);
 		assertEquals(game.tryMove("up"), false);
 	}
-	
+
 	@Test
 	void winTest() {
 		for (int i = 0; i < height - 1; i++) {
@@ -70,7 +70,7 @@ class GameTest {
 		game.tryMove("left");
 		assertEquals(ui.hasLost(), false);
 	}
-	
+
 	@Test
 	void loseTest() {
 		ui.setMiss(true);

@@ -9,7 +9,7 @@ import java.io.*;
  * @author Jacob Erdman, Randy Heckard
  *
  */
-public interface IPlayer extends Serializable{
+public interface IPlayer extends Serializable {
 	/**
 	 * Gets the IRoom that the player is in
 	 * 

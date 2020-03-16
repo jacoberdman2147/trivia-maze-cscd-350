@@ -45,7 +45,8 @@ public interface IRoomLink extends Serializable {
 	/**
 	 * Sets the room at the other end of the link
 	 * 
-	 * @param room The IRoom to set the end of the link to
+	 * @param room
+	 *            The IRoom to set the end of the link to
 	 */
 	public void setRoom(IRoom room);
 

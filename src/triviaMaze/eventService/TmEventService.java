@@ -21,9 +21,11 @@ public class TmEventService {
 		eventQueue = new LinkedList<String>();
 		currentlyHandling = false;
 	}
-	
-	//This class should have no constructor as it is designed to be a static class which java doesn't support...
-	private TmEventService() {}
+
+	// This class should have no constructor as it is designed to be a static class
+	// which java doesn't support...
+	private TmEventService() {
+	}
 
 	/**
 	 * Adds a handler to the list of handlers
@@ -73,7 +75,7 @@ public class TmEventService {
 		while (!eventQueue.isEmpty()) {
 			String message = eventQueue.remove();
 			for (int i = 0; i < handlers.size(); i++) {
-				//System.out.println(handlers.get(i).trigger); Debug
+				// System.out.println(handlers.get(i).trigger); Debug
 				if (message.equals(handlers.get(i).trigger)) {
 					handlers.get(i).fire();
 				}

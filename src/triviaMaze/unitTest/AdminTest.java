@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class AdminTest {
 
-	public void testRemove() throws IOException{
+	public void testRemove() throws IOException {
 		String input = "";
 	}
 }

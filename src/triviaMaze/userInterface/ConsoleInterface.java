@@ -8,7 +8,7 @@ import triviaMaze.databaseService.*;
 import java.io.*;
 import java.util.*;
 
-public class ConsoleInterface implements IUserInterface{
+public class ConsoleInterface implements IUserInterface {
 	private boolean exit;
 	private boolean inProgress;
 	private IDatabaseService databaseSvc;
@@ -17,31 +17,29 @@ public class ConsoleInterface implements IUserInterface{
 	private Scanner in;
 	private LinkedHashMap<String, IInterfaceFunction> inputFunctions;
 	private String clearString;
-	
-	
-	
+
 	public ConsoleInterface(IDatabaseService databaseSvc) {
 		exit = false;
 		inProgress = false;
 		this.databaseSvc = databaseSvc;
 		statusLines = new String[4];
-		for(int i = 0; i < statusLines.length; i++) {
+		for (int i = 0; i < statusLines.length; i++) {
 			statusLines[i] = "";
 		}
 		in = new Scanner(System.in);
 		inputFunctions = new LinkedHashMap<String, IInterfaceFunction>();
 		setupInputs();
-		
+
 		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < 50; i++) {
 			s.append("\n");
 		}
 		clearString = s.toString();
 	}
-	
+
 	private void setupInputs() {
 		String[] directions = {"left", "right", "up", "down"};
-		for(String dir : directions){
+		for (String dir : directions) {
 			inputFunctions.put(dir, new IInterfaceFunction() {
 				@Override
 				public void execute() {
@@ -59,19 +57,19 @@ public class ConsoleInterface implements IUserInterface{
 				}
 			});
 		}
-		
+
 		inputFunctions.put("save", new IInterfaceFunction() {
 			@Override
 			public void execute() {
 				saveGame();
 			}
-			
+
 			@Override
 			public String getHelpString() {
 				return "Allows you to save your game.";
 			}
 		});
-		
+
 		inputFunctions.put("exit", new IInterfaceFunction() {
 
 			@Override
@@ -85,9 +83,9 @@ public class ConsoleInterface implements IUserInterface{
 			public String getHelpString() {
 				return "Allows you to quit the game.";
 			}
-			
+
 		});
-		
+
 		inputFunctions.put("?", new IInterfaceFunction() {
 
 			@Override
@@ -99,7 +97,7 @@ public class ConsoleInterface implements IUserInterface{
 			public String getHelpString() {
 				return "Shows this dialogue.";
 			}
-			
+
 		});
 	}
 
@@ -126,27 +124,30 @@ public class ConsoleInterface implements IUserInterface{
 		displayRoom(cur);
 		System.out.println("\r\n");
 	}
-	
+
 	private void displayRoom(IRoom cur) {
-		//Here we pray that they are on CP437
-		System.out.println("╔═" + roomChar(cur, "up") + "═╗\r\n║   ║\r\n" + roomChar(cur, "left") + " @ " + roomChar(cur, "right") + "\r\n║   ║\r\n╚═" + roomChar(cur, "down") + "═╝");
+		// Here we pray that they are on CP437
+		System.out.println("╔═" + roomChar(cur, "up") + "═╗\r\n║   ║\r\n" + roomChar(cur, "left") + " @ " + roomChar(cur, "right") + "\r\n║   ║\r\n╚═"
+				+ roomChar(cur, "down") + "═╝");
 	}
-	
+
 	private char roomChar(IRoom cur, String dir) {
-		if (!cur.isAnswered(dir) && cur.isEnabled(dir)) return '+';
-		else if (cur.isEnabled(dir)) return ' ';
+		if (!cur.isAnswered(dir) && cur.isEnabled(dir))
+			return '+';
+		else if (cur.isEnabled(dir))
+			return ' ';
 		else {
 			switch (dir) {
-			case "left":
-			case "right":
-				return '║';
-			case "up":
-			case "down":
-				return '═';
+				case "left" :
+				case "right" :
+					return '║';
+				case "up" :
+				case "down" :
+					return '═';
 			}
 			throw new IllegalArgumentException("Invalid direction passed to roomChar method...");
 		}
-		
+
 	}
 
 	@Override
@@ -181,27 +182,22 @@ public class ConsoleInterface implements IUserInterface{
 		String[] answers = question.getAnswers();
 		String correct = question.getCorrect();
 		int correctNumber = 0;
-		for(int count = 0; count < 4;)
-		{
+		for (int count = 0; count < 4;) {
 			choice = ran.nextInt(4);
-			if(!hset.contains(choice)) 
-			{
+			if (!hset.contains(choice)) {
 				System.out.print(count + 1 + ". ");
-				if(choice == 3)
-				{
+				if (choice == 3) {
 					System.out.println(correct);
 					correctNumber = count + 1;
 					count++;
-				}
-				else
-				{
+				} else {
 					System.out.println(answers[choice]);
 					count++;
 				}
-			hset.add(choice);
+				hset.add(choice);
 			}
 		}
-		if(in.nextLine().equals(Integer.toString(correctNumber)))
+		if (in.nextLine().equals(Integer.toString(correctNumber)))
 			return true;
 		else
 			return false;
@@ -214,11 +210,12 @@ public class ConsoleInterface implements IUserInterface{
 		}
 		statusLines[statusLines.length - 1] = status;
 	}
-	
+
 	@Override
 	public void showHelp() {
 		clearScreen();
-		System.out.println("Symbols:\r\n\"+\": A closed, unanswered door\r\n\" \": An open door\r\nWall: A closed, answered door, never openable\r\n\"@\": You");
+		System.out
+				.println("Symbols:\r\n\"+\": A closed, unanswered door\r\n\" \": An open door\r\nWall: A closed, answered door, never openable\r\n\"@\": You");
 		System.out.println("Press enter to continue...");
 		in.nextLine();
 		System.out.println("Commands:");
@@ -228,7 +225,7 @@ public class ConsoleInterface implements IUserInterface{
 		System.out.println("Press enter to continue...");
 		in.nextLine();
 	}
-	
+
 	private void handleInput(String input) {
 		if (inputFunctions.containsKey(input)) {
 			inputFunctions.get(input).execute();
@@ -269,7 +266,7 @@ public class ConsoleInterface implements IUserInterface{
 			try {
 				FileInputStream fileInputStream = new FileInputStream(loadFile);
 				ObjectInputStream objInput = new ObjectInputStream(fileInputStream);
-				ITriviaMazeGame loadedGame = (ITriviaMazeGame)objInput.readObject();
+				ITriviaMazeGame loadedGame = (ITriviaMazeGame) objInput.readObject();
 				game = loadedGame;
 				game.setUi(this);
 				inProgress = true;
@@ -278,7 +275,8 @@ public class ConsoleInterface implements IUserInterface{
 				in.nextLine();
 				return;
 			} catch (IOException | ClassNotFoundException e) {
-				System.out.println("An unexpected exception occurred when trying to open the input file. Perhaps it isn't actually a save game?\nPress enter to continue...");
+				System.out.println(
+						"An unexpected exception occurred when trying to open the input file. Perhaps it isn't actually a save game?\nPress enter to continue...");
 				in.nextLine();
 				return;
 			}
@@ -306,12 +304,13 @@ public class ConsoleInterface implements IUserInterface{
 			objOut.writeObject(game);
 			showStatus("Save successful!");
 		} catch (IOException e) {
-			// TODO Make sure that this doesn't break when the game is installed to program files or whatever
+			// TODO Make sure that this doesn't break when the game is installed to program
+			// files or whatever
 			System.out.println("Creation of the new file failed, perhaps a permissions error? Save cancelled...\r\nPress enter to continue...");
 			in.nextLine();
 			return;
 		}
-		
+
 	}
 
 	@Override
@@ -323,24 +322,25 @@ public class ConsoleInterface implements IUserInterface{
 		game = new RectangularTriviaMazeGame(height, width, this);
 		inProgress = true;
 	}
-	
+
 	private int getInt(int low, int high) {
 		int ret = low - 1;
 		while (ret < low || ret > high) {
 			if (in.hasNextInt()) {
 				ret = in.nextInt();
 				in.nextLine();
-			} else in.nextLine();
+			} else
+				in.nextLine();
 		}
 		return ret;
 	}
-	
+
 	private void clearScreen() {
 		System.out.println(clearString);
 	}
-	
+
 	private void clearStatus() {
-		for(int i = 0; i < statusLines.length; i++) {
+		for (int i = 0; i < statusLines.length; i++) {
 			statusLines[i] = "";
 		}
 	}

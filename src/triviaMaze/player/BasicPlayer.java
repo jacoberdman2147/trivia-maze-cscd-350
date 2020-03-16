@@ -33,8 +33,8 @@ public class BasicPlayer implements IPlayer {
 	public void move(IRoom to) {
 		cur = to;
 	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException{
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 	}
 }

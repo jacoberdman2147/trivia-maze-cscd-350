@@ -7,7 +7,7 @@ package triviaMaze.inputService;
  * @author Jacob Erdman, Randy Heckard
  * @deprecated
  */
-public interface ITmInputService{
+public interface ITmInputService {
 
 	/**
 	 * Gets input from the user playing the game
