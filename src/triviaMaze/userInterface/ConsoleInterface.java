@@ -316,7 +316,7 @@ public class ConsoleInterface implements IUserInterface{
 
 	@Override
 	public void newGame() {
-		System.out.print("We are making a rectangular trivia maze. The size may be between 2 and 10\nDesired height: ");
+		System.out.print("We are making a rectangular trivia maze. The size may be between 2 and 10 (invalid input will be ignored)\nDesired height: ");
 		int height = getInt(2, 10);
 		System.out.print("Desired width: ");
 		int width = getInt(2, 10);
